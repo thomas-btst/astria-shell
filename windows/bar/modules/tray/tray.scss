@@ -1,0 +1,9 @@
+.tray {
+    @import './battery/battery.scss';
+    @import './brightness/brightness.scss';
+    @import './sound/sound.scss';
+    @import './network/network.scss';
+    @import './box/box.scss';
+
+    margin-right: 1px; // TITOCHECK
+}

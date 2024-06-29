@@ -1,0 +1,22 @@
+.battery{
+    .icon{
+        font-size: 17px;
+        margin-bottom: 1px;
+    }
+
+    > .discharging > .icon{
+        color: $fg;
+    }
+
+    > .charging > label{
+        color: $secondary;
+    }
+
+    > .full > label{
+        color: $primary;
+    }
+
+    > .low > label{
+        color: $alert;
+    }
+}

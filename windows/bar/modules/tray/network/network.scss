@@ -1,0 +1,14 @@
+.network{
+    // Wifi
+    .wifi label{
+        color: $primary;
+        font-size: 16px;
+        margin-bottom: 2px;
+    }
+
+    // Ethernet
+    .ethernet label{
+        color: $secondary;
+        margin-right: 14px;
+    }
+}

@@ -1,0 +1,55 @@
+// Workspaces
+.workspaces {
+    // box{
+        background-color: rgba($color: $bg-alt, $alpha: 0.8);
+        padding: 1px 3px;
+        border-radius: 10px;
+        margin: 4px 0;
+
+        label{
+            padding: 1px 5px;
+            margin: 5px 5px;
+            border-radius: 70px;
+            border: 2px solid $fg;
+            font-size: 7px;
+            transition: all 0.2s;
+
+            &.focused{
+                background-color: $primary;
+                border-color: $primary;
+            }
+
+            &.occupied{
+                border-color: $fg;
+            }
+
+            &.unoccupied{
+                border-width: 0;
+                background-color: $disabled;
+                margin: 7px 7px;
+            }
+        }
+
+        :hover{
+            .occupied{
+                border-color: $primary;
+            }
+            .unoccupied{
+                background-color: $primary;
+            }
+        }
+    // }
+
+    // .add{
+    //     label{
+    //         color: $secondary;
+    //         opacity: 0;
+    //         padding-right: 7px;
+    //         transition: all 0.1s;
+    //     }
+    //     &:hover label{
+    //         opacity: 100;
+    //         padding-left: 7px;
+    //     }
+    // }
+}

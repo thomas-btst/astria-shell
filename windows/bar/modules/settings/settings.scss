@@ -1,0 +1,18 @@
+.settings{
+    background: none;
+    border: none;
+    label{
+        font-size: 18px;
+        border-radius: 5px;
+        color: rgba($color: $fg, $alpha: 0.0);
+        background-color: rgba($color: $bg, $alpha: 0.0);
+        padding: 0 6px;
+        margin: 4px 0;
+        transition-duration: 0.2s;
+        transition-property: all;
+    }
+
+    &:hover label{
+        color: $primary;
+    }
+}
