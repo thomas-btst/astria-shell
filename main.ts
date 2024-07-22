@@ -1,4 +1,4 @@
-import { Notif } from 'windows/notif/notif'
+import { Panel } from 'windows/panel/panel'
 import {Bar} from './windows/bar/bar'
 import { PowerMenu } from 'windows/powermenu/powermenu'
 import { Settings } from 'windows/settings/settings'
@@ -23,7 +23,7 @@ App.config({
         Bar(),
         // Bar(1),
         PowerMenu.Bar(),
-        Notif.Bar(),
+        Panel.Bar(),
         Settings.Bar(),
     ],
 })

@@ -1,9 +1,9 @@
-import { Settings } from "windows/settings/settings";
+import { Panel } from "windows/panel/panel";
 
 export const SettingsModule = () => Widget.Button({
-    className: 'settings',
+    className: 'manager',
     cursor: 'pointer',
-    onClicked: () => App.toggleWindow(Settings.name),
+    onClicked: () => App.toggleWindow(Panel.name),
     child: Widget.Label({
         label: ''
     }),

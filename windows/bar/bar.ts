@@ -7,6 +7,7 @@ import { MenuModule } from "./modules/menu/menu"
 import { WorkspacesModule } from "./modules/workspaces/workspaces"
 import { WindowModule } from "./modules/window/window"
 import { SettingsModule } from "./modules/settings/settings"
+import { margins } from "windows/window"
 
 const ModulesBox = (position: 'start'|'center'|'end', children: Gtk.Widget[]) => Widget.Box({
     hpack: position,
@@ -19,7 +20,7 @@ export const Bar = (monitor: number = 0) => Widget.Window({
     anchor: ['top', 'left', 'right'],
     exclusivity: 'exclusive',
     layer: 'top',
-    margins: [8, 11, 0, 11],
+    margins: [margins, margins, 0, margins],
     monitor: monitor,
     child: Widget.CenterBox({
         className: "bar",
