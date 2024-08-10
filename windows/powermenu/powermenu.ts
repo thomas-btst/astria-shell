@@ -37,7 +37,7 @@ const PowerButton = (index: number) => {
         classNames: button.isSelected.bind().as(isSelected => [button.className].concat(isSelected ? ['selected'] : [])),
         cursor: 'pointer',
         onPrimaryClick: () => {
-            App.closeWindow(PowerMenu.name)
+            PowerMenu.close()
             Utils.execAsync(`bash -c '${button.cmd}'`)
         },
         onHover: () => updateButtons(index),
@@ -67,78 +67,72 @@ enum KeyEnum {
     ESCAPE = 9,
 }
 
-export const PowerMenu: Window = {
-    name: 'powermenu',
-
-    Bar: () => {
-
-        function dispatchKeyPress(event: Event){
-            var current: number | null = powerState.current
-            switch(event.get_keycode()[1]) {
-                case KeyEnum.TOP:
-                case KeyEnum.K:
-                case KeyEnum.LEFT:
-                case KeyEnum.H: {
-                    if (current == null)
-                        current = 0
-                    else
-                        current--
-                    break
-                }
-                case KeyEnum.BOTTOM:
-                case KeyEnum.J: if (current == null){
-                    current = Math.trunc(powerState.buttons.length / 2)
-                    break
-                }
-                case KeyEnum.RIGHT:
-                case KeyEnum.L: {
-                    if (current == null)
-                        current = powerState.buttons.length-1
-                    else
-                        current++
-                    break
-                }
-                case KeyEnum.RETURN: {
-                    App.closeWindow(PowerMenu.name)
-                    Utils.execAsync(`bash -c '${powerState.buttons[current ?? 0].cmd}'`)
-                    return
-                }
-                case KeyEnum.ESCAPE: {
-                    App.closeWindow(PowerMenu.name)
-                    return
-                }
-                default: return
-            }
-            current = Math.abs(modulo(current, powerState.buttons.length))
-            updateButtons(current)
+function dispatchKeyPress(event: Event){
+    var current: number | null = powerState.current
+    switch(event.get_keycode()[1]) {
+        case KeyEnum.TOP:
+        case KeyEnum.K:
+        case KeyEnum.LEFT:
+        case KeyEnum.H: {
+            if (current == null)
+                current = 0
+            else
+                current--
+            break
         }
+        case KeyEnum.BOTTOM:
+        case KeyEnum.J: if (current == null){
+            current = Math.trunc(powerState.buttons.length / 2)
+            break
+        }
+        case KeyEnum.RIGHT:
+        case KeyEnum.L: {
+            if (current == null)
+                current = powerState.buttons.length-1
+            else
+                current++
+            break
+        }
+        case KeyEnum.RETURN: {
+            PowerMenu.close()
+            Utils.execAsync(`bash -c '${powerState.buttons[current ?? 0].cmd}'`)
+            return
+        }
+        case KeyEnum.ESCAPE: {
+            PowerMenu.close()
+            return
+        }
+        default: return
+    }
+    current = Math.abs(modulo(current, powerState.buttons.length))
+    updateButtons(current)
+}
 
-        return Widget.Window({
-            name: PowerMenu.name,
-            visible: false,
-            anchor: ['left', 'top', 'right', 'bottom'],
-            className: PowerMenu.name,
-            layer: 'top',
-            exclusivity: 'ignore',
-            keymode: 'exclusive',
-            monitor: 0,
+export const PowerMenu: Window = new Window('powermenu', 
+    {
+        visible: false,
+        anchor: ['left', 'top', 'right', 'bottom'],
+        layer: 'top',
+        exclusivity: 'ignore',
+        keymode: 'exclusive',
+        monitor: 0,
+        child: Widget.EventBox({
+            cursor: 'default',
+            onPrimaryClick: () => PowerMenu.toggle(),
             child: Widget.EventBox({
-                cursor: 'default',
-                onPrimaryClick: () => App.toggleWindow(PowerMenu.name),
-                child: Widget.EventBox({
-                    onHoverLost: () => updateButtons(null),
+                onHoverLost: () => updateButtons(null),
+                hpack: 'center',
+                vpack: 'center',
+                child: Widget.Box({
                     hpack: 'center',
                     vpack: 'center',
-                    child: Widget.Box({
-                        hpack: 'center',
-                        vpack: 'center',
-                        children: powerState.buttons.map((button, index: number) => PowerButton(index)),
-                    })
+                    children: powerState.buttons.map((button, index: number) => PowerButton(index)),
                 })
             })
-        }).on('key-press-event', (self, event: Event) => dispatchKeyPress(event))
-        .hook(App, (self, windowName, visible) => {
-            updateButtons(null)
-        }, 'window-toggled')
+        })
+    },
+    {
+        onWindowToggle: () => updateButtons(null),
+        apply: window => window.on('key-press-event', (self, event: Event) => dispatchKeyPress(event)),
     }
-}
+)

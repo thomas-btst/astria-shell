@@ -1,33 +1,36 @@
 import { withDigits } from "utils/utils"
+import { PowerSupplyQuickMenu } from "windows/quickmenus/power_supply/power_supply"
 
 const battery = await Service.import('battery')
 
-const icons = { // TITOCHECK
+const icons = {
     charging: ['', '', '', '', ''],
     discharging: ['', '', ''],
     low: ['', ''],
     full: ''
 }
 
-enum BatteryState{
-    CHARGING = "charging",
-    DISCHARGING = "discharging",
-    LOW = "low",
-    FULL = "full",
+export enum BatteryState{
+    CHARGING = 'charging',
+    DISCHARGING = 'discharging',
+    LOW = 'low',
+    FULL = 'full',
 }
 
 const batteryPercent = battery.bind('percent').as(p => p > 0 ? p : 0)
 
+export const getBatteryState = (charging: boolean, percent: number, charged: boolean = percent === 100) => {
+    if (charged)
+        return BatteryState.FULL
+    if (charging)
+        return BatteryState.CHARGING
+    if (percent <= 20)
+        return BatteryState.LOW
+    return BatteryState.DISCHARGING
+}
+
 const batteryState = Utils.merge([battery.bind('charging'), batteryPercent],
-    (charging, percent) => {
-        if (percent == 100)
-            return BatteryState.FULL
-        if (charging)
-            return BatteryState.CHARGING
-        if (percent <= 15)
-            return BatteryState.LOW
-        return BatteryState.DISCHARGING
-    }
+    getBatteryState
 )
 
 let batteryIndex = Variable({
@@ -71,6 +74,7 @@ export const BatteryTray = () => Widget.Button({
     className: 'battery',
     cursor: 'pointer',
     onPrimaryClick: () => Utils.execAsync('alacritty -e bpytop'),
+    onSecondaryClick: () => PowerSupplyQuickMenu.toggle(),
     tooltipText: batteryTimeToEmpty,
     child: Widget.Box({
         className: batteryState,

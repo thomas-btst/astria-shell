@@ -1,4 +1,5 @@
 @import "colors/colors.scss";
+@import "windows/windows.scss";
 
 window{
     all:unset
@@ -17,36 +18,6 @@ tooltip{
     }
     // padding: 42px;
 }
-
-@import "windows/windows.scss";
-
-// .csd.background{
-   
-//     // * {
-//     //     color: $fg;
-//     //     all: initial;
-//     // }
-
-//     // background-color: rgba($color: $bg, $alpha: 0.95);
-
-//     // headerbar.titlebar {
-//     //     background-color: $bg-alt;
-//     //     box {
-//     //         .title{
-//     //             color: $primary;
-//     //         }
-//     //     }
-//     //     button {
-//     //         background-color: $primary;
-//     //         label {
-//     //             color: $bg;
-//     //         }
-//     //         &:hover label{
-//     //             color: $fg;
-//     //         }
-//     //     }
-//     // }
-// }
 
 // Systray
 menu{
@@ -82,3 +53,31 @@ menu{
         }
     }
 }
+
+// .csd.background{
+   
+//     // * {
+//     //     color: $fg;
+//     //     all: initial;
+//     // }
+
+//     // background-color: rgba($color: $bg, $alpha: 0.95);
+
+//     // headerbar.titlebar {
+//     //     background-color: $bg-alt;
+//     //     box {
+//     //         .title{
+//     //             color: $primary;
+//     //         }
+//     //     }
+//     //     button {
+//     //         background-color: $primary;
+//     //         label {
+//     //             color: $bg;
+//     //         }
+//     //         &:hover label{
+//     //             color: $fg;
+//     //         }
+//     //     }
+//     // }
+// }

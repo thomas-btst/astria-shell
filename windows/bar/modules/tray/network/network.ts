@@ -1,12 +1,12 @@
+import { limitNumberWithinRange } from "utils/utils"
+
 const network = await Service.import('network')
-// const wifiIcon = network.wifi.bind('strength').as(strength => strength.toString())
-// tooltipText: network.wifi.bind('ssid').as(ssid => ssid ?? 'Déconnecté'),
 
-// import { AGS_DIR } from "main"
-
-network.bind('wifi').as((wifi) => {
-    console.log(`Wifi: ${wifi}`)
-})
+const icons = {
+    disconnected: '󰤮',
+    connected: ['󰤟', '󰤢', '󰤥', '󰤨'],
+    alert: ['󰤠', '󰤣', '󰤦', '󰤩']
+}
 
 interface Network {
     name: string,
@@ -14,14 +14,39 @@ interface Network {
     isWired: boolean,
 }
 
-const reloadAngle = Variable(0, {
-    // poll: [5, (self) => (self.value+1)%360]
+const networkData = Variable({
+    name: '',
+    icon: icons.disconnected,
+    isWired: false,
 })
 
-const networkData = Variable(
-    "{\"name\": \"\", \"icon\": \"󰤮\", \"isWired\": false}",
-    {listen: ['bash', '/home/tito/.config/eww/scripts/getNetwork.sh']} // TITOCHECK
-).bind().as(jsonStr => JSON.parse(jsonStr))
+Utils.interval(1000, () => {
+    const iteration = (array: any[], level: number) => array[limitNumberWithinRange(
+        Math.trunc(array.length * level / 100),
+        0,
+        array.length - 1,
+    )]
+
+    const net = network
+    let icon = icons.disconnected
+    if(net.wifi.internet !== 'disconnected') icon = iteration(
+        (net.connectivity === 'full' ? icons.connected : icons.alert),
+        net.wifi.strength,
+    )
+
+    let name: string
+
+    if(net.wifi.enabled)
+        name = net.connectivity === 'none' ? 'Déconnecté' : (net.wifi.ssid ?? '')
+    else
+        name = 'Désactivé'
+        
+    networkData.setValue({
+        name,
+        icon,
+        isWired: net.primary === 'wired'
+    })
+})
 
 const isReloading = Variable(false)
 
@@ -30,7 +55,7 @@ export const NetworkTray = () => Widget.Box({
     children: [
         Widget.Revealer({
             className: 'ethernet',
-            revealChild: networkData.as((network: Network) => network.isWired),
+            revealChild: networkData.bind().as((network: Network) => network.isWired),
             transition: 'slide_right',
             transitionDuration: 440,
             child: Widget.Label({
@@ -42,29 +67,32 @@ export const NetworkTray = () => Widget.Box({
         Widget.Button({
             className: 'wifi',
             cursor: 'pointer',
-            onPrimaryClick: () => Utils.execAsync(['networkmanager_dmenu']),
+            onPrimaryClick: () => Utils.execAsync('networkmanager_dmenu'),
             onSecondaryClick: () => network.toggleWifi(),
             onScrollUp: () => {
                 isReloading.value = true
-                network.wifi.scan()
-                Utils.timeout(700, () => isReloading.value = false)
+
+                if (network.wifi.enabled){
+                    if(network.wifi.state != 'unavailable')
+                        network.wifi.scan()
+                }
+                else
+                    network.toggleWifi()
+                Utils.timeout(1000, () => {
+                    isReloading.value = false
+                })
             },
-            tooltipText: networkData.as((network: Network) => network.name),
+            tooltipText: networkData.bind().as((network: Network) => network.name),
             child: Widget.Stack({
                 children: {
-                    'reload': Widget.Label({
-                        label: ' ', // 
-                        angle: reloadAngle.bind(),
-                    }),
                     'wifi': Widget.Label({
                         yalign: 0.6,
-                        // label: wifiIcon,
-                        label: networkData.as((network: Network) => network.icon),
+                        label: networkData.bind().as((network: Network) => network.icon),
                     }),
+                    'reload': Widget.Spinner()
                 },
                 shown: isReloading.bind().as(isReloading => (isReloading ? 'reload': 'wifi')),
                 transition: 'slide_up_down',
-                // transition: isReloading.bind().as(isReloading => (isReloading ? 'slide_up' : 'slide_down')),
                 transitionDuration: 350,
             })
         }),

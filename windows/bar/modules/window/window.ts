@@ -31,7 +31,7 @@ export const WindowModule = () => Widget.Button({
     onHover: () => {windowReveal.value = true},
     onHoverLost: () => {windowReveal.value = false},
 
-    onPrimaryClick: () => Utils.execAsync(['wofi']),
+    onPrimaryClick: () => Utils.execAsync(['wofi', '--fork'], ),
     onSecondaryClick: () => Utils.execAsync(['hyprshade', 'toggle']),
 
     child: Widget.Box({

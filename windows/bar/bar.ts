@@ -16,6 +16,7 @@ const ModulesBox = (position: 'start'|'center'|'end', children: Gtk.Widget[]) =>
 })
 
 export const Bar = (monitor: number = 0) => Widget.Window({
+    className: "bar",
     name: `bar-${monitor}`,
     anchor: ['top', 'left', 'right'],
     exclusivity: 'exclusive',
@@ -23,7 +24,6 @@ export const Bar = (monitor: number = 0) => Widget.Window({
     margins: [margins, margins, 0, margins],
     monitor: monitor,
     child: Widget.CenterBox({
-        className: "bar",
 
         startWidget: ModulesBox(
             'start',

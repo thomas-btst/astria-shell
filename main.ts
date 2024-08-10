@@ -1,29 +1,48 @@
 import { Panel } from 'windows/panel/panel'
 import {Bar} from './windows/bar/bar'
 import { PowerMenu } from 'windows/powermenu/powermenu'
-import { Settings } from 'windows/settings/settings'
+import { Notifications } from 'windows/notifications/notifications'
+import { Audio } from 'windows/audio/audio'
+import { Levels } from 'windows/levels/levels'
+import { StartDaemons } from 'daemons/daemons'
+import { QuickMenus } from 'windows/quickmenus/quickmenus'
 
-export const AGS_DIR = "~/.config/ags"
+const scssFile = `${App.configDir}/style.scss`
+export const cssFile = `/tmp/my-style.css`
 
-const scss = `${App.configDir}/style.scss`
-const css = `/tmp/my-style.css`
-
-try{
-    const output = Utils.exec(`sassc ${scss} ${css}`)
-
-    console.log(`Applying style...${output && '\n'}${output}`)
-} catch (error){
-    console.log('--- Style compilation failed ---')
-    console.error(error)
+export const compileCss = () => {
+    try{
+        const output = Utils.exec(`sassc ${scssFile} ${cssFile}`)
+    
+        console.log(`Applying style...${output && '\n'}${output}`)
+    } catch (error){
+        console.log('--- Style compilation failed ---')
+        console.error(error)
+    }
 }
 
+compileCss()
+
 App.config({
-    style: css,
+    style: cssFile,
     windows: [
         Bar(),
         // Bar(1),
+        Notifications.Bar(),
         PowerMenu.Bar(),
         Panel.Bar(),
-        Settings.Bar(),
+        Audio.Bar(),
+        ...QuickMenus.map((quickmenu) => quickmenu.Bar()),
+        ...Levels.map((level) => level.Bar()),
     ],
 })
+
+Utils.monitorFile(App.configDir, (file) => {
+    if (!file.get_basename()?.endsWith('.scss'))
+        return
+    compileCss()
+    App.resetCss()
+    App.applyCss(cssFile)
+})
+
+StartDaemons()

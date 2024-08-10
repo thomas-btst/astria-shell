@@ -1,9 +1,15 @@
 .network{
     // Wifi
-    .wifi label{
-        color: $primary;
-        font-size: 16px;
-        margin-bottom: 2px;
+    .wifi {
+        label{
+            color: $primary;
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+        spinner{
+            animation: 0.8s infinite spin linear;
+            -gtk-icon-source: -gtk-icontheme("process-working-symbolic");
+        }
     }
 
     // Ethernet

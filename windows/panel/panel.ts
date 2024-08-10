@@ -1,42 +1,69 @@
-import { Settings } from "windows/settings/settings";
 import { margins, Window } from "windows/window";
 
-export const Panel: Window = {
-    name: 'panel',
-    Bar: () => Widget.Window({
-        name: Panel.name,
+import { SettingsItem } from "./items/settings/settings";
+import { HomeItem } from "./items/home/home";
+import { NotificationsItem } from "./items/notifications/notifications";
+import { HelpItem } from "./items/help/help";
+import { Item } from "./items/items";
+
+const items: Array<Item> = [HomeItem, NotificationsItem, SettingsItem, HelpItem]
+
+const state = Variable(items[0].name)
+
+export const Panel: Window = new Window('panel',
+    {
         visible: false,
         anchor: ['top', 'right', 'bottom'],
         margins: [margins, margins, margins, 0],
-        className: Panel.name,
         layer: 'top',
         exclusivity: 'exclusive',
         monitor: 0,
         child: Widget.Box({
-            vertical: true,
+            className: 'container',
             children: [
-                Widget.Box({
-                    homogeneous: true,
-                    children: [
-                        Widget.Button({
-                            hpack: 'start',
-                            onClicked: () => {
-                                App.closeWindow(Settings.name)
-                                App.closeWindow(Panel.name)
-                            },
-                            child: Widget.Label('')
-                        }),
-                        Widget.Button({
-                            hpack: 'end',
-                            onClicked: () => {
-                                App.toggleWindow(Settings.name)
-                            },
-                            child: Widget.Label('')
-                        }),
-                    ]
+                Widget.Stack({
+                    transition: 'slide_up_down',
+                    transitionDuration: 350,
+                    shown: state.bind(),
+                    children: Object.assign(
+                        {},
+                        ...items.map(item => ({
+                            [item.name]: Widget.Scrollable({
+                                hscroll: 'never',
+                                vscroll: 'external',
+                                child: Widget.Box({
+                                    className: 'item',
+                                    vertical: true,
+                                    children: [
+                                        Widget.Label({
+                                            className: 'title',
+                                            label: state.bind(),
+                                        }),
+                                        item.widget()
+                                    ]
+                                })
+                            })
+                        }))
+                    ),
                 }),
-                Widget.Label('tefkjfk kjdkljdfmq jmd kj kqljfdlkm qfmfdjsmklqj fjkst'),
+                Widget.Box({
+                    className: 'menu',
+                    vertical: true,
+                    children: items.map(item => Widget.Button({
+                        className: state.bind().as(current => current == item.name ? 'active':''),
+                        cursor: 'pointer',
+                        onClicked: () => state.setValue(item.name),
+                        child: Widget.Label(item.icon),
+                    })),
+                }),
             ]
         }),
-    }),
-}
+    },
+    {
+        onWindowToggle: () => state.setValue(NotificationsItem.name),
+        transition: {
+            type: 'slide_left',
+            duration: 350,
+        }
+    },
+)

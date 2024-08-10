@@ -1,3 +1,5 @@
+import { limitNumberWithinRange } from "utils/utils"
+
 class BrightnessService extends Service {
     static {
         Service.register(
@@ -11,43 +13,41 @@ class BrightnessService extends Service {
         )
     }
 
-    #interface = Utils.exec("sh -c 'ls -w1 /sys/class/backlight | head -1'")
+    private interface = Utils.exec("sh -c 'ls -w1 /sys/class/backlight | head -1'")
 
-    #screenValue = 0
-    #max = Number(Utils.exec('brightnessctl max'))
+    private screenValue = 0
+    private max = Number(Utils.exec('brightnessctl max'))
 
     get screen_value() {
-        return this.#screenValue
+        return this.screenValue
     }
 
     set screen_value(percent: number) {
-        if (percent < 0)
-            percent = 0
-
-        if (percent > 100)
-            percent = 100
+        percent = limitNumberWithinRange(percent, 1, 100)
 
         Utils.execAsync(`brightnessctl set ${percent}% -q`)
-    }
-
-    addValue(percent: number) {
-        Utils.execAsync(`brightnessctl set ${percent >= 0 ? `+${percent}%`:`${-percent}%-`}`)
+        this.screenValue = percent
     }
 
     constructor() {
         super()
 
-        Utils.monitorFile(`/sys/class/backlight/${this.#interface}/brightness`, () => this.#onChange())
+        Utils.monitorFile(`/sys/class/backlight/${this.interface}/brightness`, () => this.onChange())
 
-        this.#onChange()
+        this.onChange()
     }
 
-    #onChange() {
-        this.#screenValue = Number(Utils.exec('brightnessctl get')) / this.#max * 100
-        this.emit('changed')
-        this.notify('screen-value')
+    private async onChange() {
+        Utils.execAsync(['brightnessctl', 'get']).then(value => {
+            this.screenValue = Number(value) / this.max * 100
+            this.emit('changed')
+            this.notify('screen-value')
+    
+            this.emit('screen-changed', this.screenValue)
 
-        this.emit('screen-changed', this.#screenValue)
+            if (this.screenValue <= 0)
+                this.screen_value = 1
+        })
     }
 
     connect(event = 'screen-changed', callback) {

@@ -1,15 +1,19 @@
 export class Locker{
-    constructor(private lockTime: number) {}
+    private lockedTime = 0
 
-    isLocked = false
+    get isLocked(){
+        return this.lockedTime >= Date.now()
+    }
+    
 
-    lock(): boolean {
+    lock(ms: number){
+        this.lockedTime = Date.now() + ms
+    }
+
+    lockIfNotLocked(ms: number): boolean{
         if (this.isLocked)
             return false
-        this.isLocked = true
-        Utils.timeout(this.lockTime, () => {
-            this.isLocked = false
-        })
+        this.lock(ms)
         return true
     }
 }

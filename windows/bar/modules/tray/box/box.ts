@@ -7,13 +7,9 @@ const systemtray = await Service.import('systemtray')
 const boxReveal = Variable(false)
 
 const SysTrayItem = (item: TrayItem) => {
-    if (item.menu){
-        // console.log(item.menu.margin=100)
-        // item.menu
-    }
     return Widget.Button({
         cursor: 'pointer',
-        child: Widget.Icon().bind('icon', item, 'icon'),
+        child: Widget.Icon(item.icon),
         tooltipMarkup: item.bind('tooltip_markup'),
         vpack: 'center',
         onPrimaryClick: (_, event) => item.openMenu(event),
@@ -30,7 +26,7 @@ export const BoxTray = () => Widget.Box({
             transition: 'slide_left',
             transitionDuration: 400,
             child: Widget.Box({
-                spacing: 1,
+                spacing: 2,
                 className: 'systemtray',
                 children: systemtray.bind('items').as(i => i.map(SysTrayItem)),
             }),

@@ -17,24 +17,33 @@ const workspaces = Utils.merge([hyprland.bind('workspaces'), hyprland.active.bin
         if (workspaces.length == 0)
             return []
         const lastId = workspaces[workspaces.length - 1].id
-        const ws = Array(lastId).fill(WorkspaceState.UNOCCUPIED)
+        const ws: WorkspaceState[] = Array(lastId).fill(WorkspaceState.UNOCCUPIED)
         workspaces.forEach(workspace => {
             ws[workspace.id-1] = workspace.current && WorkspaceState.FOCUSED || WorkspaceState.OCCUPIED
         })
         return ws
 })
 
+const Workspace = (id: number, className: string) => Widget.Button({
+    cursor: 'pointer',
+    onClicked: () => hyprland.message(`dispatch workspace ${id + 1}`),
+    tooltip_text: (id + 1).toString(),
+    child: Widget.Label({
+        vpack: 'center',
+        className
+    })
+})
+
 export const WorkspacesModule = () => Widget.Box({
     className: 'workspaces',
-    children: workspaces.as(workspaces => 
-        workspaces.map((workspace, id) => 
-            Widget.Button({
-                cursor: 'pointer',
-                onClicked: () => hyprland.message(`dispatch workspace ${id + 1}`),
-                child: Widget.Label({
-                    className: workspace
-                })
-            })
-        )
+    children: workspaces.as(workspaces =>
+        [
+            Widget.Box({
+                children: workspaces.map((workspace, id) => Workspace(id, workspace))
+            }),
+            ...Array(Math.max(0, 10 - workspaces.length))
+                .fill(WorkspaceState.UNOCCUPIED)
+                .map((button, id) => Workspace(id + workspaces.length, `hidden ${WorkspaceState.UNOCCUPIED}`))
+        ]
     )
 })

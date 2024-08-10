@@ -1,8 +1,10 @@
+import GLib from "types/@girs/glib-2.0/glib-2.0"
 import { Locker } from "utils/locker"
 import { limitNumberWithinRange, withDigits } from "utils/utils"
+import { ClockQuickMenu } from "windows/quickmenus/clock/clock"
 
-const date = Variable(new Date, {
-    poll: [1000, () => new Date]
+const date = Variable(GLib.DateTime.new_now_local(), {
+    poll: [1000, () => GLib.DateTime.new_now_local()]
 })
 
 const animationDuration = 440
@@ -25,7 +27,7 @@ abstract class ClockState{
 
     private static statusEnumLength = Object.keys(StatusEnum).length / 2
 
-    static locker = new Locker(animationDuration - 150)
+    static locker = new Locker()
 
     static dispatchEvent(event: EventEnum){
         switch(event) {
@@ -44,7 +46,7 @@ abstract class ClockState{
             }
             case EventEnum.SCROLL_UP:
             case EventEnum.SCROLL_DOWN: {
-                if (!this.locker.lock())
+                if (!this.locker.lockIfNotLocked(animationDuration - 150))
                     return
                 const currentValue = this.state.value == StatusEnum.ALL ? StatusEnum.NONE : this.state.value
                 const updatedRevealValue = limitNumberWithinRange(
@@ -66,6 +68,7 @@ export const ClockModule = () => Widget.Button({
     cursor: 'pointer',
 
     onPrimaryClick: () => ClockState.dispatchEvent(EventEnum.CLICKED),
+    onSecondaryClickRelease: () => ClockQuickMenu.toggle(),
     onScrollUp: () => ClockState.dispatchEvent(EventEnum.SCROLL_UP),
     onScrollDown: () => ClockState.dispatchEvent(EventEnum.SCROLL_DOWN),
 
@@ -82,13 +85,13 @@ export const ClockModule = () => Widget.Button({
                 transitionDuration: animationDuration,
 
                 child: Widget.Label({
-                    label: date.bind().as(date => `${withDigits(date.getDate())}/${withDigits(date.getMonth() + 1)}/${date.getFullYear()} `)
+                    label: date.bind().as(date => `${withDigits(date.get_day_of_month())}/${withDigits(date.get_month())}/${date.get_year()} `)
                 }),
             }),
 
             // Time
             Widget.Label({
-                label: date.bind().as(date => `${withDigits(date.getHours())}:${withDigits(date.getMinutes())}`)
+                label: date.bind().as(date => `${withDigits(date.get_hour())}:${withDigits(date.get_minute())}`)
             }),
 
             // Seconds
@@ -102,7 +105,7 @@ export const ClockModule = () => Widget.Button({
                 transitionDuration: animationDuration,
 
                 child: Widget.Label({
-                    label: date.bind().as(date => `:${withDigits(date.getSeconds())}`),
+                    label: date.bind().as(date => `:${withDigits(date.get_second())}`),
                 }),
             }),
         ]

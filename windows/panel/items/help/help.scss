@@ -1,0 +1,40 @@
+.help{
+    .searchbar{
+        margin: 13px 0;
+        entry{
+            border-radius: 7px;
+            padding: 3px 8px;
+            background-color: $fg;
+            color: $bg;
+        }
+        button{
+            font-size: 20px;
+            color: $bg;
+            padding: 5px 7px;
+            background: $primary;
+            border-radius: 7px;
+
+            &:hover{
+                color: $fg;
+            }
+        }
+    }
+    flowbox{
+        padding: 10px;
+        border-top: 1px solid $bg-alt;
+
+        &.submap{
+            border: 2px solid $disabled;
+            border-radius: 7px;
+
+        }
+
+        .keys label{
+            margin: 0 4px;
+            padding: 2px 6px;
+            border-radius: 7px;
+            color: $bg;
+            background-color: $primary;
+        }
+    }
+}

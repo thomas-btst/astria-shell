@@ -1,0 +1,79 @@
+@import '../../../notifications/notifications.scss';
+
+box.notifications {
+    margin: 10px 0;
+    .header{
+        switch{
+            background-color: $disabled;
+            border-radius: 10px;
+            padding: 2px;
+            transition: all 0.1s;
+
+            &:checked{
+                background-color: $primary;
+
+                image{
+                    color: $primary;
+                }
+            }
+
+            image{
+                color: $disabled;
+            }
+        
+            slider{
+                min-height: 21px;
+                min-width: 21px;
+                background-color: $fg;
+                border-radius: 100%;
+            }
+        }
+
+        button{
+            font-size: 20px;
+            background-color: $primary;
+            padding: 5px 8px;
+            border-radius: 7px;
+            transition: all 0.2s;
+
+            &:hover{
+                color: $bg;
+            }
+
+            &:active{
+                color: $fg;
+                background-color: $bg-alt;
+            }
+        }
+    }
+
+    .body{
+        @include notifications;
+    
+        .overlay:hover .close, .overlay .close:hover {
+            opacity: 1;
+    
+            &:hover {
+                color: $primary;
+            }
+        }
+
+        .time {
+            color: $disabled;
+            padding: 2px 4px;
+            font-size: 13px;
+        }
+
+        .overlay:hover .time {
+            opacity: 0;
+        }
+        
+        .overlay .close {
+            font-size: 17px;
+            opacity: 0;
+            margin-top: 10px;
+            margin-right: 10px;
+        }
+    }
+    
+}
