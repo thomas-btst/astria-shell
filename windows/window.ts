@@ -37,6 +37,7 @@ export class Window{
 
                 window.child = Widget.Box({
                     css: 'padding: 0.1px;',
+                    hpack: 'center',
                     child: Widget.Revealer({
                             revealChild: this.revealer.reveal.bind(),
                             transition: params.transition.type,

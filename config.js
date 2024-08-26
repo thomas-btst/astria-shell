@@ -1,3 +1,5 @@
+// @ts-check
+
 const entry = App.configDir + '/main.ts'
 const outdir = '/tmp/ags/js'
 

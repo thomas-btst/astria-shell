@@ -19,13 +19,12 @@ window.level{
     scale{
         trough{
             min-height: 150px;
-            min-width: 34px;
             background-color: $bg;
             border-radius: 15px;
             border: 2px solid $bg-alt;
 
             highlight{
-                min-width: 32px;
+                min-width: 34px;
                 border-radius: 15px;
                 background-color: $fg;
             }

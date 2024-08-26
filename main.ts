@@ -8,12 +8,12 @@ import { StartDaemons } from 'daemons/daemons'
 import { QuickMenus } from 'windows/quickmenus/quickmenus'
 
 const scssFile = `${App.configDir}/style.scss`
-export const cssFile = `/tmp/my-style.css`
+export const cssFile = `/tmp/ags/style.css`
 
 export const compileCss = () => {
     try{
         const output = Utils.exec(`sassc ${scssFile} ${cssFile}`)
-    
+
         console.log(`Applying style...${output && '\n'}${output}`)
     } catch (error){
         console.log('--- Style compilation failed ---')

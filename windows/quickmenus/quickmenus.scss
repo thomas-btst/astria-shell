@@ -1,0 +1,7 @@
+window.quickmenu {
+    *{
+        all: unset;
+        font-family: 'Noto Sans Mono';
+    }
+    @import './clock/clock.scss';
+}

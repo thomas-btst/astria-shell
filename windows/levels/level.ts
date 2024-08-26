@@ -3,13 +3,22 @@ import { Binding } from "types/service"
 import { margins, MultiWindow } from "windows/window"
 import { Locker } from "utils/locker"
 
-const displayTime = 3000
-
 export class Level extends MultiWindow {
 
     private displayTime = 0
 
     private locker = new Locker
+
+    private isHovered = false
+
+    private onHover() {
+        this.isHovered = true
+    }
+
+    private onHoverLost() {
+        this.isHovered = false
+        this.show(1000)
+    }
 
     constructor(params: {
         name: string,
@@ -40,16 +49,20 @@ export class Level extends MultiWindow {
                     vertical: true,
                     spacing: 6,
                     children: [
-                        Widget.Slider({
-                            cursor: 'pointer',
-                            onChange: ({value}) => params.set(value / 100),
-                            orientation: Gtk.Orientation.VERTICAL,
-                            value: params.value.as(value => {this.show(); return value * 100}),
-                            min: 0,
-                            max: 100,
-                            step: 1,
-                            drawValue: false,
-                            inverted: true,
+                        Widget.EventBox({
+                            onHover: () => this.onHover(),
+                            onHoverLost: () => this.onHoverLost(),
+                            child: Widget.Slider({
+                                cursor: 'pointer',
+                                onChange: ({value}) => params.set(value),
+                                orientation: Gtk.Orientation.VERTICAL,
+                                value: params.value.as(value => {this.show(); return value}),
+                                min: 0,
+                                max: 1,
+                                step: 0.01,
+                                drawValue: false,
+                                inverted: true,
+                            }),
                         }),
                         Widget.Button({
                             className: clickable ? 'clickable' : '',
@@ -61,9 +74,13 @@ export class Level extends MultiWindow {
                                 this.show()
                                 params.onClicked()
                             },
+                            onHover: () => this.onHover(),
+                            onHoverLost: () => this.onHoverLost(),
                             label: params.icon,
-                        }),
-                    ]
+                        })
+                    ].map((button) => button.on('leave-notify-event', (self, event) => {
+                        self.on_hover_lost(self, event)
+                    }))
                 })
             },
             {
@@ -76,14 +93,14 @@ export class Level extends MultiWindow {
         this.locker.lock(1000)
     }
 
-    show(){
-        if (this.locker.isLocked)
+    show(ms: number = 3000){
+        if (this.locker.isLocked || this.isHovered)
             return
-        this.displayTime = Date.now() + displayTime
+        this.displayTime = Date.now() + ms
         this.closeOthers()
         this.open()
-        Utils.timeout(displayTime, () => {
-            if(this.displayTime <= Date.now())
+        Utils.timeout(ms, () => {
+            if(!this.isHovered && this.displayTime <= Date.now())
                 this.close()
         })
     }

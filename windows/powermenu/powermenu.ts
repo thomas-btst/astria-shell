@@ -1,13 +1,14 @@
-import { Variable } from "resource:///com/github/Aylur/ags/variable.js"
 import { Event } from "types/@girs/gdk-3.0/gdk-3.0.cjs"
 import { modulo } from "utils/utils"
 import { Window } from "windows/window"
+
+const hyprland = await Service.import('hyprland')
 
 interface ButtonData {
     icon: string,
     cmd: string,
     className: string,
-    isSelected: Variable<boolean>,
+    isSelected: ReturnType<typeof Variable<boolean>>,
 }
 
 interface PowerState {
@@ -21,13 +22,13 @@ const powerState: PowerState = {
         ['', 'systemctl poweroff', 'poweroff'],
         ['', 'systemctl reboot', 'reboot'],
         ['󰗽', 'killall Hyprland', 'logout'],
-        ['', 'swaylock', 'lock'],
-        ['󰒲', 'swaylock ; systemctl suspend', 'suspend'],
+        ['', 'hyprlock --immediate', 'lock'],
+        ['󰒲', 'hyprlock --immediate --immediate-render & systemctl suspend', 'suspend'],
     ).map((button) => ({
         icon: button[0],
         cmd: button[1],
         className: button[2],
-        isSelected: new Variable(false),
+        isSelected: Variable(false),
     }))
 }
 
@@ -115,7 +116,6 @@ export const PowerMenu: Window = new Window('powermenu',
         layer: 'top',
         exclusivity: 'ignore',
         keymode: 'exclusive',
-        monitor: 0,
         child: Widget.EventBox({
             cursor: 'default',
             onPrimaryClick: () => PowerMenu.toggle(),
@@ -132,7 +132,10 @@ export const PowerMenu: Window = new Window('powermenu',
         })
     },
     {
-        onWindowToggle: () => updateButtons(null),
+        onWindowToggle: () => {
+            updateButtons(null)
+        },
         apply: window => window.on('key-press-event', (self, event: Event) => dispatchKeyPress(event)),
-    }
+    },
 )
+

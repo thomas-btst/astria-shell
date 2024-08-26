@@ -1,4 +1,4 @@
-import { icons } from "windows/bar/modules/tray/sound/sound";
+import { soundIcons } from "windows/bar/modules/tray/sound/data";
 import { Level } from "../level";
 
 const audio = await Service.import('audio')
@@ -7,7 +7,7 @@ const icon = Utils.merge([
     audio.speaker.bind('id'),
     audio.speaker.bind('is_muted'),
 ], (id: number, isMuted: boolean) => {
-    const icon = id === 1 ? icons.default : icons.headphones
+    const icon = id === 1 ? soundIcons.default : soundIcons.headphones
     return isMuted ? icon.muted : icon.normal
 })
 

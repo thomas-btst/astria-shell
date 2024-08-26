@@ -9,6 +9,7 @@ export class QuickMenu extends MultiWindow {
         super('quickmenu',
             name,
             {
+                className: 'quickmenu',
                 visible: false,
                 anchor: ['top', 'right'],
                 layer: 'overlay',

@@ -32,7 +32,7 @@ export const WindowModule = () => Widget.Button({
     onHoverLost: () => {windowReveal.value = false},
 
     onPrimaryClick: () => Utils.execAsync(['wofi', '--fork'], ),
-    onSecondaryClick: () => Utils.execAsync(['hyprshade', 'toggle']),
+    onSecondaryClick: () => Utils.execAsync(['hyprshade', 'toggle', 'blue-light-filter']),
 
     child: Widget.Box({
         children: [
@@ -47,6 +47,8 @@ export const WindowModule = () => Widget.Button({
             }),
             Widget.Label({
                 className: 'title',
+                maxWidthChars: 30,
+                truncate: 'end',
                 label: windowTitle.as(title => capitalize(windowTitleReplacers.get(title) ?? title)),
             }),
         ]
