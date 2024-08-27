@@ -1,4 +1,7 @@
 .clock{
+    @import './stopped/stopped.scss';
+    @import './playing/playing.scss';
+
     padding: 8px 15px;
     background-color: $bg;
     border-radius: 7px;
@@ -12,43 +15,6 @@
         &:hover{
             color: $bg;
             background-color: $primary;
-        }
-    }
-
-    .stopped{
-        .selector label{
-            font-size: 15px;
-        }
-
-        button{
-            margin-left: 10px;
-        }
-
-        scale{
-            value {
-                font-size: 0px;
-            }
-            trough{
-                min-height: 80px;
-                background-color: $disabled;
-                border-radius: 15px;
-                highlight{
-                    min-width: 6px;
-                    border-radius: 7px;
-                    background-color: $primary;
-                }
-                slider{
-                    margin: -2px -9px;
-                    background-color: $fg;
-                }
-            }
-        }
-    }
-
-    .playing{
-        background-color: $bg;
-        label.time {
-            font-size: 15px;
         }
     }
 }

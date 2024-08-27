@@ -1,0 +1,23 @@
+.playing{
+    margin: 5px 0;
+    background-color: $bg;
+
+    label.time {
+        font-size: 15px;
+    }
+
+    revealer{
+        button{
+            margin-left: 10px;
+        }
+    }
+
+    progressbar{
+        trough{
+            background-color: $bg-alt;
+            progress{
+                background-color: $primary;
+            }
+        }
+    }
+}

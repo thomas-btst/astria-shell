@@ -15,7 +15,6 @@ export const SoundTray = () => Widget.Button({
     onScrollUp: () => audio.speaker.volume+=0.02,
     onScrollDown: () => audio.speaker.volume-=0.02,
     tooltipText: soundVolume.as(volume => `${Math.trunc(volume)}%`),
-    onHover: () => SpeakerLevel.show(),
     child: Widget.Stack({
         transition: 'crossfade',
         transitionDuration: 500,

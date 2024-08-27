@@ -5,7 +5,6 @@ export class Locker{
         return this.lockedTime >= Date.now()
     }
     
-
     lock(ms: number){
         this.lockedTime = Date.now() + ms
     }
@@ -15,5 +14,11 @@ export class Locker{
             return false
         this.lock(ms)
         return true
+    }
+
+    decreaseLock(ms: number){
+        if (!this.isLocked)
+            return
+        this.lockedTime -= ms
     }
 }

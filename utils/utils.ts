@@ -44,3 +44,10 @@ export const ComboBoxText = Widget.subclass(Gtk.ComboBoxText)
 export type ArgumentTypes<F extends Function> = F extends (...args: infer A) => any ? A : never;
 
 export type ConstructorParams<T extends new (...args: any) => any> = T extends new (...args: infer P) => any ? P : never;
+
+export enum PositionType {
+    LEFT = 'LEFT',
+    RIGHT = 'RIGHT',
+    TOP = 'TOP',
+    BOTTOM = 'BOTTOM',
+}

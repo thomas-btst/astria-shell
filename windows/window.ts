@@ -1,6 +1,7 @@
 import { ArgumentTypes, ConstructorParams } from "utils/utils";
 
 export const margins = 11
+export const borderRadius = 7
 
 type WindowParams = ArgumentTypes<typeof Widget.Window>[0]
 
