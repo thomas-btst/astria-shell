@@ -1,3 +1,4 @@
+import Gdk from "types/@girs/gdk-3.0/gdk-3.0"
 import GLib from "types/@girs/glib-2.0/glib-2.0"
 import { Locker } from "utils/locker"
 import { limitNumberWithinRange, withDigits } from "utils/utils"

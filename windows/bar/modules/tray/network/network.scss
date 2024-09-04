@@ -7,6 +7,7 @@
             margin-bottom: 2px;
         }
         spinner{
+            color: $primary;
             animation: 0.8s infinite spin linear;
             -gtk-icon-source: -gtk-icontheme("process-working-symbolic");
         }

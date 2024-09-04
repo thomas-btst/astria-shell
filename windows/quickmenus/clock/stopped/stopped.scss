@@ -1,21 +1,10 @@
 .stopped{
-
-    button{
-        margin-left: 10px;
-    }
-
     .separator{
         margin: 0 -4px;
     }
 
     .selector{
         all: unset;
-
-        label.header{
-            color: $fg;
-            font-size: 10px;
-            margin-bottom: 3px;
-        }
 
         stack{
             label{
@@ -31,8 +20,6 @@
         }
 
         &:hover{
-            // border-right: 1px solid $bg-alt;
-            // border-left: 1px solid $bg-alt;
             label{
                 color: darken($primary, 20%);
                 &.header{
@@ -46,23 +33,4 @@
             }
         }
     }
-    // scale{
-    //     value {
-    //         font-size: 0px;
-    //     }
-    //     trough{
-    //         min-height: 80px;
-    //         background-color: $disabled;
-    //         border-radius: 15px;
-    //         highlight{
-    //             min-width: 6px;
-    //             border-radius: 7px;
-    //             background-color: $primary;
-    //         }
-    //         slider{
-    //             margin: -2px -9px;
-    //             background-color: $fg;
-    //         }
-    //     }
-    // }
 }
