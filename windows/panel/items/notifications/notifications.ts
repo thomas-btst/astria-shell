@@ -74,7 +74,7 @@ export const NotificationsItem: Item = {
                 vertical: true,
                 spacing: 12,
                 children: Notifications.bind().as(notifs => (
-                    notifs.size == 0
+                    notifs.size === 0
                     ? [Widget.Label('Aucune notification')]
                     : ([...notifs.values()].reverse())
                 )),

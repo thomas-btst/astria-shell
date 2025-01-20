@@ -12,7 +12,7 @@ export const cssFile = `/tmp/ags/style.css`
 
 export const compileCss = () => {
     try{
-        const output = Utils.exec(`sassc ${scssFile} ${cssFile}`)
+        const output = Utils.exec(`sass ${scssFile} ${cssFile}`)
 
         console.log(`Applying style...${output && '\n'}${output}`)
     } catch (error){

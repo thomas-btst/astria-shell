@@ -1,5 +1,6 @@
 import { SpeakerLevel } from "windows/levels/speaker/speaker"
 import { SoundIcon, soundIcons } from "./data"
+import { SpeakerQuickMenu } from "windows/quickmenus/speaker/speaker"
 
 const audio = await Service.import('audio')
 
@@ -10,8 +11,8 @@ const getIconBinding = (icon: SoundIcon) => audio.speaker.bind('is_muted').as(is
 export const SoundTray = () => Widget.Button({
     className: 'sound',
     cursor: 'pointer',
-    onPrimaryClick: () => audio.speaker.is_muted = !audio.speaker.is_muted,
-    onSecondaryClick: () => Utils.execAsync('pavucontrol'),
+    onPrimaryClick: () => SpeakerQuickMenu.toggle(),
+    onSecondaryClick: () => audio.speaker.is_muted = !audio.speaker.is_muted,
     onScrollUp: () => audio.speaker.volume+=0.02,
     onScrollDown: () => audio.speaker.volume-=0.02,
     tooltipText: soundVolume.as(volume => `${Math.trunc(volume)}%`),

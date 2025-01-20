@@ -38,8 +38,6 @@ menu{
         padding: 4px 6px;
 
 
-        // >image{}
-
         >label, >box{
             margin: 0 30px;
         }
@@ -53,31 +51,3 @@ menu{
         }
     }
 }
-
-// .csd.background{
-   
-//     // * {
-//     //     color: $fg;
-//     //     all: initial;
-//     // }
-
-//     // background-color: rgba($color: $bg, $alpha: 0.95);
-
-//     // headerbar.titlebar {
-//     //     background-color: $bg-alt;
-//     //     box {
-//     //         .title{
-//     //             color: $primary;
-//     //         }
-//     //     }
-//     //     button {
-//     //         background-color: $primary;
-//     //         label {
-//     //             color: $bg;
-//     //         }
-//     //         &:hover label{
-//     //             color: $fg;
-//     //         }
-//     //     }
-//     // }
-// }

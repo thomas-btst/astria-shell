@@ -2,6 +2,7 @@ import { Notification as Notif } from "types/service/notifications";
 import { margins, Window } from "windows/window";
 import Gtk from "gi://Gtk?version=3.0";
 import { Variable as Var } from "types/variable";
+import cairo from "types/@girs/cairo-1.0/cairo-1.0";
 
 const notifications = await Service.import('notifications')
 const hyprland = await Service.import('hyprland')
@@ -147,7 +148,7 @@ export const Notifications = new Window('notifications',
         exclusivity: Utils.merge([hyprland.bind('clients'), hyprland.active.bind('client')],
         (clients, client) => {
             const c = hyprland.getClient(client.address)
-            if (c !== undefined && c.fullscreen)
+            if (c !== undefined && c.fullscreen && c.fullscreenMode === 0)
                 return 'ignore'
             return 'normal'
         }

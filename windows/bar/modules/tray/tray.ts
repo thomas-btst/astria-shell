@@ -6,7 +6,7 @@ import { SoundTray } from "./sound/sound";
 
 export const TrayModule = () => Widget.Box({
     className: 'tray',
-    spacing: 14,
+    spacing: 13,
     children: [
         BoxTray(),
         BatteryTray(),

@@ -11,13 +11,11 @@ const icons = {
 interface Network {
     name: string,
     icon: string,
-    isWired: boolean,
 }
 
 const networkData = Variable({
     name: '',
     icon: icons.disconnected,
-    isWired: false,
 })
 
 Utils.interval(1000, () => {
@@ -34,6 +32,9 @@ Utils.interval(1000, () => {
         net.wifi.strength,
     )
 
+    if(!net.wifi.enabled)
+        icon = '󰪎'
+
     let name: string
 
     if(net.wifi.enabled)
@@ -44,7 +45,6 @@ Utils.interval(1000, () => {
     networkData.setValue({
         name,
         icon,
-        isWired: net.primary === 'wired'
     })
 })
 
@@ -55,7 +55,7 @@ export const NetworkTray = () => Widget.Box({
     children: [
         Widget.Revealer({
             className: 'ethernet',
-            revealChild: networkData.bind().as((network: Network) => network.isWired),
+            revealChild: network.bind('primary').as(primary => primary === 'wired'),
             transition: 'slide_right',
             transitionDuration: 440,
             child: Widget.Label({
@@ -65,7 +65,7 @@ export const NetworkTray = () => Widget.Box({
             })
         }),
         Widget.Button({
-            className: 'wifi',
+            className: network.wifi.bind('enabled').as(enabled => `wifi ${enabled ? '' : 'disabled'}`),
             cursor: 'pointer',
             onPrimaryClick: () => Utils.execAsync('networkmanager_dmenu'),
             onSecondaryClick: () => network.toggleWifi(),
