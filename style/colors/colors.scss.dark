@@ -1,0 +1,13 @@
+$fg: #dddddd;
+$fg-alt: #000000;
+//$primary: #663399;
+$primary: #9966CC;
+//$primary: #268bd2;
+$secondary: #2ec27e;
+$alert: #DC322F;
+$disabled: #707880;
+$bg: #000000;
+$bg-alt: #292929;
+$opacity: 0.82;
+$yellow: #f3c23c;
+$discord: #7289da;

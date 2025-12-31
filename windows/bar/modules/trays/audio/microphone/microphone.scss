@@ -1,0 +1,7 @@
+@use "../../../../../../style/env";
+
+@mixin microphone {
+    .microphone {
+        color: env.$red;
+    }
+}

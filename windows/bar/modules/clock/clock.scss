@@ -1,0 +1,8 @@
+@use "../../../../style/env";
+
+@mixin clock {
+    .clock {
+        color: env.$primary;
+        font-weight: bold;
+    }
+}

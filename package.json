@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "lint": "eslint . --fix"
+  },
+  "dependencies": {
+    "ags": "*",
+    "gnim": "*"
+  },
+  "devDependencies": {
+    "eslint": "^9.19.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "typescript-eslint": "^8.21.0"
+  }
+}

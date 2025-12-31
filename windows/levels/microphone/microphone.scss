@@ -1,0 +1,4 @@
+@use "../../../style/env";
+@use "../../../widgets/level/level" as *;
+
+@include level("microphone", env.$red)

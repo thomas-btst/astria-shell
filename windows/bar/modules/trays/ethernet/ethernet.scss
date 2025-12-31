@@ -1,0 +1,7 @@
+@use "../../../../../style/env";
+
+@mixin ethernet {
+    .ethernet {
+        color: env.$secondary;
+    }
+}

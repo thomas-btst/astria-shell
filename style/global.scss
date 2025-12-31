@@ -1,0 +1,19 @@
+@use "env";
+
+@mixin global {
+    * {
+        font-family: "Noto Sans Mono";
+    }
+
+    tooltip{
+        margin-top: 8px;
+        font-weight: bold;
+        font-size: 13px;
+        background-color: rgba($color: env.$bg, $alpha: env.$opacity);
+        border-radius: env.$border-radius;
+        border: 2px solid env.$bg-alt;
+        label {
+            padding: 5px 8px;
+        }
+    }
+}

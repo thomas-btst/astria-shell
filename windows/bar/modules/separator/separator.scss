@@ -1,0 +1,8 @@
+@use "../../../../style/env";
+
+@mixin separator {
+    .separator{
+        font-size: 16px;
+        color: env.$disabled;
+    }
+}

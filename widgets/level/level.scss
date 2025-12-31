@@ -1,0 +1,43 @@
+@use "../../style/env";
+
+window.level {
+    * {
+        all: unset;
+    }
+
+    image {
+        color: env.$bg;
+        transition: all 100ms;
+
+        &.low {
+            color: env.$fg;
+        }
+    }
+
+    scale {
+        trough {
+            min-width: 160px;
+            background-color: env.$bg;
+            border-radius: env.$border-radius;
+            padding: 4px;
+
+            highlight {
+                min-height: 36px;
+                border-radius: 4px;
+                background-color: env.$fg;
+            }
+        }
+    }
+}
+
+@mixin level($className, $color) {
+    window.level .#{$className} {
+        image.low {
+            color: $color;
+        }
+
+        scale trough highlight {
+            background-color: $color;
+        }
+    }
+}

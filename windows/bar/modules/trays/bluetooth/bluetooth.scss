@@ -1,0 +1,7 @@
+@use "../../../../../style/env";
+
+@mixin bluetooth {
+    .bluetooth {
+        color: env.$primary;
+    }
+}

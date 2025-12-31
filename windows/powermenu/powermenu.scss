@@ -1,0 +1,56 @@
+@use "../../style/env";
+
+window.powermenu .background {
+    background-color: rgba($color: #000000, $alpha: 0.2);
+
+    * {
+        all: unset;
+    }
+
+    box {
+        background-color: env.$bg;
+        border-radius: 10px;
+
+        button {
+            background-color: rgba($color: env.$bg-alt, $alpha: 0.4);
+            color: env.$fg;
+            margin: 5px;
+            padding: 9px 12px;
+            font-size: 50px;
+            border-radius: 10px;
+
+            &.selected {
+                color: env.$fg-alt;
+                background-color: env.$primary;
+            }
+
+            &:active {
+                background-color: env.$disabled;
+            }
+
+            @mixin button($className, $color, $padding: false) {
+                &.#{$className} {
+
+                    &:not(:hover):not(.selected),
+                    &:not(.selected) {
+                        color: $color
+                    }
+
+                    @if $padding {
+                        padding: $padding
+                    }
+                }
+            }
+
+            @include button(poweroff, #DC322F);
+
+            @include button(reboot, #2ec27e);
+
+            @include button(logout, #707880);
+
+            @include button(lock, #d6af02);
+
+            @include button(suspend, #C37DB6)
+        }
+    }
+}
