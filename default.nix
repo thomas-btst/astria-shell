@@ -7,6 +7,7 @@
   programs.ags = {
     enable = true;
     configDir = ./.;
+    # TODO centralize colors
     # TODO add used pakcages
     extraPackages = with inputs.astal.packages.${system}; [
       apps
