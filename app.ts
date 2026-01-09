@@ -10,7 +10,6 @@ import { requestHandler } from "./request"
 app.start({
     css: style,
     icons: `${SRC}/icons`,
-    iconTheme: "MoreWaita",
     main() {
         Bar()
         PowerMenu.Window()
