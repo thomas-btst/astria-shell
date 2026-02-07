@@ -16,20 +16,33 @@ in {
 
     configDir = ./.;
 
-    # TODO centralize colors
-    # TODO add used pakcages
-    extraPackages = with inputs.astal.packages.${system}; [
-      apps
-      battery
-      bluetooth
-      hyprland
-      mpris
-      network
-      notifd
-      powerprofiles
-      tray
-      wireplumber
-      pkgs.libadwaita
-    ];
+    # TODOc centralize colors
+    extraPackages = with inputs.astal.packages.${system};
+      [
+        #--- Astal libraries ---
+        apps
+        battery
+        bluetooth
+        hyprland
+        mpris
+        network
+        notifd
+        powerprofiles
+        tray
+        wireplumber
+      ]
+      ++ (with pkgs; [
+        #--- Packages ---
+        alacritty
+        blueman
+        btop
+        hypridle
+        libadwaita
+        libnotify
+        networkmanager_dmenu
+        pavucontrol
+        uutils-coreutils-noprefix
+        wofi
+      ]);
   };
 }

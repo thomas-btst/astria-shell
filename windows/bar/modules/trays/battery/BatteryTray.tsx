@@ -50,7 +50,7 @@ export const BatteryTray: TrayItem = {
                 class="battery"
                 cursor={Cursor.POINTER}
                 onClicked={() => {
-                    execAsync("alacritty --class alacritty-float -e bpytop").catch(console.error)
+                    execAsync("alacritty --class alacritty-float -e btop").catch(console.error)
                 }}
                 tooltipText={batteryTimeTo}
             >

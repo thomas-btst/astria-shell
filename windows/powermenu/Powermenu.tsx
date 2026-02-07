@@ -33,7 +33,7 @@ function updateSelected(index: number | null) {
 
 function execCmd(cmd: string) {
     PowerMenu.close()
-    execAsync(`bash -c '${cmd}'`).catch(console.error)
+    execAsync(`sh -c '${cmd}'`).catch(console.error)
 }
 
 function dispatchKeyPress(key: number) {

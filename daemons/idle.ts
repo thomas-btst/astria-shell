@@ -13,7 +13,7 @@ export const IdleDaemon: Daemon<boolean> = {
     start() {
         if (this.state.get()) return
         setState(true)
-        execAsync(`bash -c '${waitProgram} || ${program}'`)
+        execAsync(`sh -c '${waitProgram} || ${program}'`)
             .catch(() => {})
             .finally(() => {
                 setState(false)
