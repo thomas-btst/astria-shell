@@ -11,6 +11,7 @@ with lib; let
 in {
   options.custom.desktop.ags.enable = lib.mkEnableOption "AGS";
 
+  # TODO patch astal battery notif bug
   config.programs.ags = mkIf cfg.enable {
     enable = true;
 
@@ -33,7 +34,7 @@ in {
       ]
       ++ (with pkgs; [
         #--- Packages ---
-        alacritty
+        alacritty # TODO do not use alacritty or use default terminal instead
         blueman
         btop
         hypridle

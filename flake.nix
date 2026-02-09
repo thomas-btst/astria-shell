@@ -17,7 +17,7 @@
     };
   in {
     devShells.${system}.default = pkgs.mkShell {
-      buildInputs = [ags.packages.${system}.default];
+      buildInputs = [ags.packages.${system}.agsFull];
 
       shellHook = ''
         ags types -d ./
@@ -27,7 +27,7 @@
         SOURCE="$HOME/.local/share/ags"
 
         if [ -d "$SOURCE" ]; then
-           ln -sfn "$SOURCE" ./node_modules/ags
+          ln -sfn "$SOURCE" ./node_modules/ags
         fi
       '';
     };
