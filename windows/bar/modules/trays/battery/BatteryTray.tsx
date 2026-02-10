@@ -50,7 +50,9 @@ export const BatteryTray: TrayItem = {
                 class="battery"
                 cursor={Cursor.POINTER}
                 onClicked={() => {
-                    execAsync("alacritty --class alacritty-float -e btop").catch(console.error)
+                    execAsync(
+                        "hyprctl dispatch 'exec [float on; size 1000 600]' 'xdg-terminal-exec --hold btop'",
+                    ).catch(console.error)
                 }}
                 tooltipText={batteryTimeTo}
             >

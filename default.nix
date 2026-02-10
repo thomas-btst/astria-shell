@@ -33,7 +33,7 @@ in {
       ]
       ++ (with pkgs; [
         #--- Packages ---
-        alacritty # TODO do not use alacritty or use default terminal instead
+        xdg-terminal-exec
         blueman
         btop
         hypridle
