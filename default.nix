@@ -11,7 +11,6 @@ with lib; let
 in {
   options.custom.desktop.ags.enable = lib.mkEnableOption "AGS";
 
-  # TODO patch astal battery notif bug
   config.programs.ags = mkIf cfg.enable {
     enable = true;
 

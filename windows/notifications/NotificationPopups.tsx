@@ -4,6 +4,7 @@ import AstalNotifd from "gi://AstalNotifd"
 import { Notification } from "../../widgets/Notification"
 import AstalHyprland from "gi://AstalHyprland"
 import { Utils } from "../../utils/utils"
+import { batteryAppName } from "../../daemons/battery"
 
 interface Notif {
     notification: AstalNotifd.Notification
@@ -11,7 +12,6 @@ interface Notif {
 }
 
 const animationDuration = 130
-
 export default function NotificationPopups() {
     const notifd = AstalNotifd.get_default()
     const hyprland = AstalHyprland.get_default()
@@ -22,6 +22,10 @@ export default function NotificationPopups() {
             active: createState(active),
         }
     }
+
+    notifd.notifications.forEach((n) => {
+        if (n.appName === batteryAppName) n.dismiss()
+    })
 
     const [notifications, setNotifications] = createState(notifd.notifications.map((n) => toNotif(n, true)))
 

@@ -16,8 +16,8 @@ interface PowerButtonProps {
 const actions = Array<[string, string, string]>(
     ["system-shutdown-symbolic", "systemctl poweroff", "poweroff"],
     ["system-reboot-symbolic", "systemctl reboot", "reboot"],
-    ["application-exit-symbolic", "killall Hyprland", "logout"],
-    ["system-lock-screen-symbolic", "hyprlock", "lock"],
+    ["application-exit-symbolic", "loginctl terminate-user $USER", "logout"],
+    ["system-lock-screen-symbolic", "loginctl lock-session", "lock"],
     ["weather-clear-night-symbolic", "hyprlock --immediate --immediate-render & systemctl suspend", "suspend"],
 ).map((action) => ({
     iconName: action[0],

@@ -7,6 +7,8 @@ const battery = AstalBattery.get_default()
 const myBattery = Battery.get_default()
 const notifications = AstalNotifd.get_default()
 
+export const batteryAppName = "Batterie"
+
 export const BatteryDaemon = () => {
     let lastId: number | null = null
 
@@ -18,7 +20,7 @@ export const BatteryDaemon = () => {
 
         function sendNotif(summary: string) {
             clearNotif()
-            Utils.notify({ appName: "Batterie", icon: battery.iconName, summary })
+            Utils.notify({ appName: batteryAppName, icon: battery.iconName, summary })
                 .then((id) => {
                     lastId = +id
                 })
