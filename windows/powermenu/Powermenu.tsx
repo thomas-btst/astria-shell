@@ -18,7 +18,7 @@ const actions = Array<[string, string, string]>(
     ["system-reboot-symbolic", "systemctl reboot", "reboot"],
     ["application-exit-symbolic", "loginctl terminate-user $USER", "logout"],
     ["system-lock-screen-symbolic", "loginctl lock-session", "lock"],
-    ["weather-clear-night-symbolic", "hyprlock --immediate --immediate-render & systemctl suspend", "suspend"],
+    ["weather-clear-night-symbolic", "systemctl suspend", "suspend"],
 ).map((action) => ({
     iconName: action[0],
     cmd: action[1],
