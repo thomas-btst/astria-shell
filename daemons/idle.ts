@@ -1,27 +1,26 @@
-import { execAsync } from "ags/process"
+import { Process, subprocess } from "ags/process"
 import { Daemon } from "./daemon"
 import { createState } from "ags"
 
-const program = "hypridle"
-const [state, setState] = createState(false)
+const [process, setProcess] = createState<Process | null>(null)
 
-const waitProgram = `PID=$(pidof ${program}); [[ $PID ]] && tail --pid=$PID -f /dev/null`
+const cmd = 'systemd-inhibit --what=idle --who="AGS" --why="Inhibit screen idle" sleep infinity'
 
-export const IdleDaemon: Daemon<boolean> = {
-    state,
+export const IdleInhibitorDaemon: Daemon<boolean> = {
+    state: process((process) => process !== null),
 
     start() {
-        if (this.state.get()) return
-        setState(true)
-        execAsync(`sh -c '${waitProgram} || ${program}'`)
-            .catch(() => {})
-            .finally(() => {
-                setState(false)
-            })
+        if (this.state()) return
+        const process = subprocess(`sh -c '${cmd}'`)
+        process.connect("exit", () => {
+            setProcess(null)
+        })
+        setProcess(process)
     },
 
     stop() {
-        if (!this.state.get()) return
-        void execAsync(`pkill ${program}`)
+        const _process = process()
+        if (!_process) return
+        _process.kill()
     },
 }

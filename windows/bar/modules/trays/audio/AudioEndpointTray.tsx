@@ -40,11 +40,11 @@ export function AudioEndpointTray({
                         execAsync(onPrimaryClick).catch(console.error)
                     }}
                 />
-                <Gtk.GestureClick button={3} onPressed={() => (endpoint.get().mute = !endpoint.get().mute)} />
+                <Gtk.GestureClick button={3} onPressed={() => (endpoint().mute = !endpoint().mute)} />
                 <Gtk.EventControllerScroll
                     flags={Gtk.EventControllerScrollFlags.VERTICAL}
                     onScroll={(_, __, delta) => {
-                        const _endpoint = endpoint.get()
+                        const _endpoint = endpoint()
                         const newVolume = _endpoint.volume - delta * 0.1
                         _endpoint.volume = Utils.Number.limitNumberWithinRange(newVolume, 0, 1)
                     }}

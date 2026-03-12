@@ -1,26 +1,21 @@
-import { createBinding, createComputed, createState, With } from "ags"
+import { createComputed, createState, With } from "ags"
 import { Gtk } from "ags/gtk4"
 import { subprocess } from "ags/process"
 import Apps from "gi://AstalApps?version=0.1"
 import { Cursor } from "../../../../utils/gtk"
 import { Env } from "../../../../utils/env"
-import AstalHyprland from "gi://AstalHyprland"
 import { Utils } from "../../../../utils/utils"
+import { DesktopManager } from "../../../../services/desktop_manager/desktop_manager_service"
+import { DesktopManagerInterface } from "../../../../services/desktop_manager/desktop_manager_interface"
 
 export function WindowInfoModule() {
-    const hyprland = AstalHyprland.get_default()
     const apps = new Apps.Apps()
+
+    const desktopManager = DesktopManager.get_default()
 
     const [revealIcon, setRevealIcon] = createState(false) //?TODO always display the icon
 
-    const className = Utils.unnestBinding(
-        createBinding(
-            hyprland,
-            "focusedClient",
-        )((client: AstalHyprland.Client | null) =>
-            client ? createBinding(client, "initialClass") : createState(null)[0],
-        ),
-    )
+    const className = desktopManager.focusedClient((client: DesktopManagerInterface.Client | null) => client?.className)
 
     const windowProps = createComputed((get) => {
         const _className = get(className)

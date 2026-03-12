@@ -59,7 +59,7 @@ export default function Bar() {
             class="bar"
             exclusivity={Astal.Exclusivity.EXCLUSIVE}
             anchor={TOP | LEFT | RIGHT}
-            layer={Astal.Layer.BACKGROUND}
+            layer={Astal.Layer.TOP}
             margin_left={Env.margin}
             margin_right={Env.margin}
             margin_top={Env.margin}

@@ -17,6 +17,7 @@ in {
     configDir = ./.;
 
     # TODOc centralize colors
+    # TODOf implement menu, popup menu, lock screen and screen manager
     extraPackages = with inputs.astal.packages.${system};
       [
         #--- Astal libraries ---
@@ -36,7 +37,6 @@ in {
         xdg-terminal-exec
         blueman
         btop
-        hypridle
         libadwaita
         libnotify
         networkmanager_dmenu

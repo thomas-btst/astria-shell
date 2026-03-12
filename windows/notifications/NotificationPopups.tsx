@@ -1,10 +1,9 @@
-import { createBinding, createComputed, createState, For, onCleanup, State } from "ags"
+import { createComputed, createState, For, onCleanup, State } from "ags"
 import { Astal, Gtk } from "ags/gtk4"
 import AstalNotifd from "gi://AstalNotifd"
 import { Notification } from "../../widgets/Notification"
-import AstalHyprland from "gi://AstalHyprland"
-import { Utils } from "../../utils/utils"
 import { batteryAppName } from "../../daemons/battery"
+import { DesktopManager } from "../../services/desktop_manager/desktop_manager_service"
 
 interface Notif {
     notification: AstalNotifd.Notification
@@ -14,7 +13,7 @@ interface Notif {
 const animationDuration = 130
 export default function NotificationPopups() {
     const notifd = AstalNotifd.get_default()
-    const hyprland = AstalHyprland.get_default()
+    const desktopManager = DesktopManager.get_default()
 
     function toNotif(notification: AstalNotifd.Notification, active = false): Notif {
         return {
@@ -32,7 +31,9 @@ export default function NotificationPopups() {
     const notifiedHandler = notifd.connect("notified", (_, id, replaced) => {
         const notification = notifd.get_notification(id)
 
-        if (replaced && notifications.get().some((n) => n.notification.id === id)) {
+        if (!notification) return
+
+        if (replaced && notifications().some((n) => n.notification.id === id)) {
             setNotifications((ns) => ns.map((n) => (n.notification.id === id ? toNotif(notification) : n)))
         } else {
             setNotifications((ns) => [toNotif(notification), ...ns])
@@ -40,7 +41,7 @@ export default function NotificationPopups() {
     })
 
     const resolvedHandler = notifd.connect("resolved", (_, id) => {
-        notifications.get().forEach((n) => {
+        notifications().forEach((n) => {
             if (n.notification.id === id) n.active[1](false)
         })
         setTimeout(() => {
@@ -53,19 +54,7 @@ export default function NotificationPopups() {
         notifd.disconnect(resolvedHandler)
     })
 
-    const fullscreen = Utils.unnestBinding(
-        createBinding(
-            hyprland,
-            "focusedClient",
-        )((client: AstalHyprland.Client | null) => {
-            if (client)
-                return createBinding(
-                    client,
-                    "fullscreen",
-                )((fullscreen) => fullscreen === AstalHyprland.Fullscreen.FULLSCREEN)
-            else return createState(false)[0]
-        }),
-    )
+    const fullscreen = desktopManager.focusedClient((client) => client?.isFullscreen ?? false)
 
     return (
         <window

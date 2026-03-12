@@ -1,26 +1,26 @@
-import { IdleDaemon } from "../../../../../daemons/idle"
+import { IdleInhibitorDaemon } from "../../../../../daemons/idle"
 import { Env } from "../../../../../utils/env"
 import { Cursor } from "../../../../../utils/gtk"
 import { TrayItem } from "../TraysModule"
 
 export const IdleTray: TrayItem = {
-    status: IdleDaemon.state((state) => (state ? TrayItem.Status.Collapsed : TrayItem.Status.Visible)),
+    status: IdleInhibitorDaemon.state((state) => (state ? TrayItem.Status.Visible : TrayItem.Status.Collapsed)),
     Tray() {
         return (
             <button
                 class="idle"
                 cursor={Cursor.POINTER}
                 onClicked={() => {
-                    if (IdleDaemon.state.get()) IdleDaemon.stop()
-                    else IdleDaemon.start()
+                    if (IdleInhibitorDaemon.state()) IdleInhibitorDaemon.stop()
+                    else IdleInhibitorDaemon.start()
                 }}
-                tooltipText={IdleDaemon.state(
-                    (state) => `${state ? "Désactiver" : "Activer"} le verrouillage automatique`,
+                tooltipText={IdleInhibitorDaemon.state(
+                    (state) => `${state ? "Activer" : "Désactiver"} le verrouillage automatique`,
                 )}
             >
                 <image
-                    iconName={IdleDaemon.state((state) => `changes-${state ? "prevent" : "allow"}-symbolic`)}
-                    pixelSize={IdleDaemon.state((state) => (state ? Env.iconSize : Env.iconSize - 1))}
+                    iconName={IdleInhibitorDaemon.state((state) => `changes-${state ? "allow" : "prevent"}-symbolic`)}
+                    pixelSize={IdleInhibitorDaemon.state((state) => (state ? Env.iconSize - 1 : Env.iconSize))}
                 />
             </button>
         )

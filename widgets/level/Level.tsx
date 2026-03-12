@@ -34,7 +34,7 @@ export class Level extends MultiWindowOverlay {
 
     private onHoverLost() {
         this.isHovered = false
-        if (this.reveal.get()) this.show(750)
+        if (this.reveal()) this.show(750)
     }
 
     constructor({ name, icon, value, setValue, active }: MultiWindowOverlayProps) {

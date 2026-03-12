@@ -1,111 +1,63 @@
-import { Accessor, createBinding, createComputed, createState, For } from "ags"
+import { Accessor, createComputed, For } from "ags"
 import { Gtk } from "ags/gtk4"
-import AstalHyprland from "gi://AstalHyprland"
 import { Cursor } from "../../../../utils/gtk"
 import { Utils } from "../../../../utils/utils"
+import { DesktopManager } from "../../../../services/desktop_manager/desktop_manager_service"
+import { DesktopManagerInterface } from "../../../../services/desktop_manager/desktop_manager_interface"
 
 interface WorkspaceButtonProps {
-    workspaceId: number
-    isFocused?: Accessor<boolean>
-    children: JSX.Element
+    id: number
+    index: Accessor<number>
+    state: Accessor<DesktopManagerInterface.Workspace.State>
 }
 
-function WorkspaceButton({ workspaceId, isFocused, children }: WorkspaceButtonProps) {
-    const hyprland = AstalHyprland.get_default()
+function WorkspaceButton({ id, index, state }: WorkspaceButtonProps) {
+    const desktopManager = DesktopManager.get_default()
+
+    const isFocused = state((state) => state === DesktopManagerInterface.Workspace.State.FOCUSED)
+    const isEmpty = state((state) => state === DesktopManagerInterface.Workspace.State.EMPTY)
+    const isInactive = state((state) => state === DesktopManagerInterface.Workspace.State.INACTIVE)
 
     return (
         <button
             class="workspace"
-            tooltipText={workspaceId.toString()}
+            tooltipText={index((index) => index.toString())}
             cursor={Cursor.POINTER}
             onClicked={() => {
-                if (isFocused?.get()) hyprland.dispatch("togglespecialworkspace", "magic")
-                else hyprland.dispatch("workspace", workspaceId.toString())
+                desktopManager.focusWorkspace(id)
             }}
         >
-            {children}
+            <box
+                cssClasses={createComputed((get) =>
+                    Utils.classNames(
+                        get(isFocused) && "focused",
+                        get(isEmpty) && "empty",
+                        get(isInactive) && "hidden",
+                        get(desktopManager.isSpecialWorkspace) && "special",
+                    ),
+                )}
+                valign={Gtk.Align.CENTER}
+            >
+                <revealer
+                    revealChild={isFocused}
+                    transitionType={Gtk.RevealerTransitionType.SLIDE_LEFT}
+                    transitionDuration={160}
+                >
+                    <box />
+                </revealer>
+            </box>
         </button>
     )
 }
 
 export function WorkspacesModule() {
-    const hyprland = AstalHyprland.get_default()
-
-    const hyprlandWorkspaces = createBinding(hyprland, "workspaces")
-    const hyprlandWorkspacesMap = hyprlandWorkspaces((ws) => new Map(ws.map((w) => [w.id, w])))
-    const workspaces = hyprlandWorkspaces((ws) => {
-        const last = ws.reduce((max, current) => (current.id > max.id ? current : max))
-        return Array.from({ length: last.id }, (_, i) => i + 1)
-    })
-    const remainingWorkspaces = workspaces((ws) =>
-        Array.from({ length: Math.max(0, 10 - ws.length) }, (_, i) => i + ws.length + 1),
-    )
-    const focusedWorkspace = createBinding(hyprland, "focusedWorkspace")
-    const isSpecial = Utils.unnestBinding(
-        createBinding(
-            hyprland,
-            "focusedClient",
-        )((client: AstalHyprland.Client | null) => {
-            if (client)
-                return Utils.unnestBinding(
-                    createBinding(
-                        client,
-                        "workspace",
-                    )((w: AstalHyprland.Workspace | null) => {
-                        if (w) return createBinding(w, "id")((id) => id < 0)
-                        else return createState(false)[0]
-                    }),
-                )
-            else return createState(false)[0]
-        }),
-    )
+    const desktopManager = DesktopManager.get_default()
 
     return (
         <box class="workspaces">
-            <box>
-                <For each={workspaces}>
-                    {(wId) => {
-                        const isFocused = focusedWorkspace((fw) => fw.id === wId)
-                        const isUnoccupied = hyprlandWorkspacesMap((ws) => !ws.has(wId))
-                        return (
-                            <WorkspaceButton workspaceId={wId} isFocused={isFocused}>
-                                <box
-                                    cssClasses={createComputed((get) =>
-                                        Utils.classNames(
-                                            get(isFocused) && "focused",
-                                            get(isUnoccupied) && "unoccupied",
-                                            get(isSpecial) && "special",
-                                        ),
-                                    )}
-                                    valign={Gtk.Align.CENTER}
-                                >
-                                    <revealer
-                                        revealChild={isFocused}
-                                        transitionType={Gtk.RevealerTransitionType.SLIDE_LEFT}
-                                        transitionDuration={160}
-                                    >
-                                        <box />
-                                    </revealer>
-                                </box>
-                            </WorkspaceButton>
-                        )
-                    }}
-                </For>
-            </box>
-            <box>
-                <For each={remainingWorkspaces}>
-                    {(wId) => (
-                        <WorkspaceButton workspaceId={wId}>
-                            <box
-                                cssClasses={isSpecial((isSpecial) =>
-                                    Utils.classNames("hidden", isSpecial && "special"),
-                                )}
-                                valign={Gtk.Align.CENTER}
-                            />
-                        </WorkspaceButton>
-                    )}
-                </For>
-            </box>
+            <For each={desktopManager.workspaces} id={(workspace) => workspace.id}>
+                {(workspace, index) => <WorkspaceButton id={workspace.id} index={index} state={workspace.state} />}
+            </For>
         </box>
     )
 }

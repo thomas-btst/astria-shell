@@ -37,7 +37,7 @@ function execCmd(cmd: string) {
 }
 
 function dispatchKeyPress(key: number) {
-    let current = selected.get()
+    let current = selected()
     switch (key) {
         case Gdk.KEY_Up:
         case Gdk.KEY_k:

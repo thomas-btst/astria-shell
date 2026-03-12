@@ -58,7 +58,7 @@ export class WindowOverlay {
     }
 
     get isOpen() {
-        return this.reveal.get()
+        return this.reveal()
     }
 
     get isNotAnimating() {
