@@ -1,5 +1,5 @@
 import { Accessor, createBinding } from "ags"
-import AstalWp from "gi://AstalWp"
+import AstalWp from "gi://AstalWp?version=0.1"
 import { TrayItem } from "../TraysModule"
 import { Cursor } from "../../../../../utils/gtk"
 import { Gtk } from "ags/gtk4"

@@ -1,9 +1,8 @@
 import { monitorFile, readFile } from "ags/file"
-import { getter, register } from "ags/gobject"
+import GObject, { getter, register } from "ags/gobject"
 import { exec } from "ags/process"
 import { Utils } from "../utils/utils"
-import Gio from "gi://Gio"
-import GObject from "gi://GObject?version=2.0"
+import Gio from "gi://Gio?version=2.0"
 
 const path = "/sys/class/backlight"
 

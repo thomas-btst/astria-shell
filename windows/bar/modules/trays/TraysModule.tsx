@@ -5,12 +5,12 @@ import { BatteryTray } from "./battery/BatteryTray"
 import { Gtk } from "ags/gtk4"
 import { SpeakerTray } from "./audio/speaker/SpeakerTray"
 import { MicrophoneTray } from "./audio/microphone/MicrophoneTray"
-import AstalTray from "gi://AstalTray"
 import { Cursor } from "../../../../utils/gtk"
 import { Env } from "../../../../utils/env"
-import GObject from "gi://GObject?version=2.0"
+import GObject from "ags/gobject"
 import { BluetoothTray } from "./bluetooth/BluetoothTray"
 import { IdleTray } from "./idle/IdleTray"
+import AstalTray from "gi://AstalTray?version=0.1"
 
 export namespace TrayItem {
     export enum Status {

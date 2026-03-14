@@ -1,6 +1,6 @@
 import { createComputed, createState, For, onCleanup, State } from "ags"
 import { Astal, Gtk } from "ags/gtk4"
-import AstalNotifd from "gi://AstalNotifd"
+import AstalNotifd from "gi://AstalNotifd?version=0.1"
 import { Notification } from "../../widgets/Notification"
 import { batteryAppName } from "../../daemons/battery"
 import { DesktopManager } from "../../services/desktop_manager/desktop_manager_service"

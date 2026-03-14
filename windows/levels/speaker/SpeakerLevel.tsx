@@ -1,10 +1,10 @@
 import { createBinding } from "ags"
-import Wp from "gi://AstalWp"
+import AstalWp from "gi://AstalWp?version=0.1"
 import { Level } from "../../../widgets/level/Level"
 import { Speaker } from "../../../services/speaker_service"
 import { Utils } from "../../../utils/utils"
 
-const audio = Wp.get_default()
+const audio = AstalWp.get_default()
 
 const speaker = createBinding(audio, "defaultSpeaker")
 

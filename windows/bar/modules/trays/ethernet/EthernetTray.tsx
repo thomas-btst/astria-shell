@@ -1,4 +1,4 @@
-import AstalNetwork from "gi://AstalNetwork"
+import AstalNetwork from "gi://AstalNetwork?version=0.1"
 import { Env } from "../../../../../utils/env"
 import { createBinding, createComputed } from "ags"
 import { TrayItem } from "../TraysModule"

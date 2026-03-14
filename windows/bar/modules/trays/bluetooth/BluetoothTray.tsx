@@ -1,4 +1,4 @@
-import AstalBluetooth from "gi://AstalBluetooth"
+import AstalBluetooth from "gi://AstalBluetooth?version=0.1"
 import { Env } from "../../../../../utils/env"
 import { createBinding, createComputed } from "ags"
 import { TrayItem } from "../TraysModule"

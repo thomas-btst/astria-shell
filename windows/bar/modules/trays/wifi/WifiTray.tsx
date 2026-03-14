@@ -1,5 +1,5 @@
 import { createBinding, createComputed } from "ags"
-import AstalNetwork from "gi://AstalNetwork"
+import AstalNetwork from "gi://AstalNetwork?version=0.1"
 import { Cursor } from "../../../../../utils/gtk"
 import { execAsync } from "ags/process"
 import { Gtk } from "ags/gtk4"

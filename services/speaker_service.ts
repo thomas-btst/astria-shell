@@ -1,6 +1,6 @@
 import { getter, register } from "ags/gobject"
-import AstalWp from "gi://AstalWp"
-import GObject from "gi://GObject"
+import AstalWp from "gi://AstalWp?version=0.1"
+import GObject from "ags/gobject"
 
 @register()
 export class Speaker extends GObject.Object {

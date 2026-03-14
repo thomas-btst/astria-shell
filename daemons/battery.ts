@@ -1,4 +1,4 @@
-import AstalBattery from "gi://AstalBattery"
+import AstalBattery from "gi://AstalBattery?version=0.1"
 import AstalNotifd from "gi://AstalNotifd?version=0.1"
 import { Battery } from "../services/battery_service"
 import { Utils } from "../utils/utils"

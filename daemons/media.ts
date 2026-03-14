@@ -1,12 +1,12 @@
-import Mpris from "gi://AstalMpris"
-import Wp from "gi://AstalWp"
+import AstalMpris from "gi://AstalMpris?version=0.1"
+import AstalWp from "gi://AstalWp?version=0.1"
 import { createBinding } from "ags"
 import { Speaker } from "../services/speaker_service"
 import { Utils } from "../utils/utils"
 
 export const MediaDaemon = () => {
-    const mpris = Mpris.get_default()
-    const audio = Wp.get_default()
+    const mpris = AstalMpris.get_default()
+    const audio = AstalWp.get_default()
     const speaker = Speaker.get_default()
 
     let lastId: number = audio.defaultSpeaker.id
@@ -17,7 +17,7 @@ export const MediaDaemon = () => {
             lastId = id
             if (speaker.isDefault)
                 mpris.players.forEach((player) => {
-                    if (player.playbackStatus === Mpris.PlaybackStatus.PLAYING) player.pause()
+                    if (player.playbackStatus === AstalMpris.PlaybackStatus.PLAYING) player.pause()
                 })
         },
     )

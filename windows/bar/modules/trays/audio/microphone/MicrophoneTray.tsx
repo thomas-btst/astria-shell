@@ -1,5 +1,5 @@
-import AstalWp from "gi://AstalWp"
 import { AudioEndpointTray } from "../AudioEndpointTray"
+import AstalWp from "gi://AstalWp?version=0.1"
 import { createBinding } from "ags"
 import { Utils } from "../../../../../../utils/utils"
 

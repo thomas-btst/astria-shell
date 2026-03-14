@@ -1,6 +1,6 @@
 import { Gdk, Gtk } from "ags/gtk4"
-import Adw from "gi://Adw"
-import AstalNotifd from "gi://AstalNotifd"
+import AstalNotifd from "gi://AstalNotifd?version=0.1"
+import Adw from "gi://Adw?version=1"
 import GLib from "gi://GLib?version=2.0"
 import Pango from "gi://Pango?version=1.0"
 import { Cursor } from "../utils/gtk"

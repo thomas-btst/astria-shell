@@ -1,6 +1,6 @@
 import { getter, gtype, property, register } from "ags/gobject"
-import AstalBattery from "gi://AstalBattery"
-import GObject from "gi://GObject"
+import AstalBattery from "gi://AstalBattery?version=0.1"
+import GObject from "ags/gobject"
 
 @register()
 export class Battery extends GObject.Object {

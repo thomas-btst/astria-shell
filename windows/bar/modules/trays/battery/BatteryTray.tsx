@@ -1,5 +1,5 @@
 import { createBinding, createComputed } from "ags"
-import AstalBattery from "gi://AstalBattery"
+import AstalBattery from "gi://AstalBattery?version=0.1"
 import { Utils } from "../../../../../utils/utils"
 import { Cursor } from "../../../../../utils/gtk"
 import { execAsync } from "ags/process"
