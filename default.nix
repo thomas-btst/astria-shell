@@ -11,38 +11,43 @@ with lib; let
 in {
   options.custom.desktop.ags.enable = lib.mkEnableOption "AGS";
 
-  config.programs.ags = mkIf cfg.enable {
-    enable = true;
+  config = mkIf cfg.enable {
+    custom.desktop.manager.autostart = [["${config.programs.ags.finalPackage}/bin/ags" "run"]];
 
-    configDir = ./.;
+    programs.ags = {
+      enable = true;
 
-    # TODOc centralize colors
-    # TODOf implement menu, popup menu, lock screen and screen manager
-    extraPackages = with inputs.astal.packages.${system};
-      [
-        #--- Astal libraries ---
-        apps
-        battery
-        bluetooth
-        hyprland
-        mpris
-        network
-        notifd
-        powerprofiles
-        tray
-        wireplumber
-      ]
-      ++ (with pkgs; [
-        #--- Packages ---
-        xdg-terminal-exec
-        blueman
-        btop
-        libadwaita
-        libnotify
-        networkmanager_dmenu
-        pavucontrol
-        uutils-coreutils-noprefix
-        wofi
-      ]);
+      configDir = ./.;
+
+      # TODOc centralize colors
+      # TODO ! improve notifications with max size clamp
+      # TODOf implement menu, popup menu, lock screen and screen manager
+      extraPackages = with inputs.astal.packages.${system};
+        [
+          #--- Astal libraries ---
+          apps
+          battery
+          bluetooth
+          hyprland
+          mpris
+          network
+          notifd
+          powerprofiles
+          tray
+          wireplumber
+        ]
+        ++ (with pkgs; [
+          #--- Packages ---
+          xdg-terminal-exec
+          blueman
+          btop
+          libadwaita
+          libnotify
+          networkmanager_dmenu
+          pavucontrol
+          uutils-coreutils-noprefix
+          wofi
+        ]);
+    };
   };
 }
