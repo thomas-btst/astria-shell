@@ -7,7 +7,7 @@ window.bar {
     @include util.unsetAll;
     & {
         color: env.$fg;
-        font-size: 15px; // # TODO centralize
+        font-size: 15px;
         background-color: rgba($color: env.$bg, $alpha: env.$opacity);
         padding: 0 13px;
         border-radius: env.$border-radius;

@@ -20,7 +20,6 @@ in {
       configDir = ./.;
 
       # TODOc centralize colors
-      # TODO ! improve notifications with max size clamp
       # TODOf implement menu, popup menu, lock screen and screen manager
       extraPackages = with inputs.astal.packages.${system};
         [
@@ -38,6 +37,7 @@ in {
         ]
         ++ (with pkgs; [
           #--- Packages ---
+          noto-fonts
           xdg-terminal-exec
           blueman
           btop

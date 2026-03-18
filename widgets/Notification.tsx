@@ -82,6 +82,7 @@ export function Notification({ notification: n }: NotificationProps) {
                             <label
                                 class="body"
                                 wrap
+                                wrapMode={Pango.WrapMode.WORD_CHAR}
                                 useMarkup
                                 halign={Gtk.Align.FILL}
                                 xalign={0}
