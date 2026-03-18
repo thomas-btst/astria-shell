@@ -20,6 +20,11 @@ export namespace Utils {
         return a?.toLowerCase() === b?.toLowerCase()
     }
 
+    export function truncateString(str: string, maxLength: number): string {
+        if (str.length > maxLength) return str.slice(0, maxLength) + "..."
+        return str
+    }
+
     export function classNames(...args: (string | false | undefined | null)[]) {
         return args.filter(Boolean) as string[]
     }

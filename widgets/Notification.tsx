@@ -47,7 +47,7 @@ export function Notification({ notification: n }: NotificationProps) {
                     />
                     <label
                         class="app-name"
-                        halign={Gtk.Align.START}
+                        halign={Gtk.Align.FILL}
                         ellipsize={Pango.EllipsizeMode.END}
                         label={n.appName || "Unknown"}
                     />
@@ -73,7 +73,7 @@ export function Notification({ notification: n }: NotificationProps) {
                     <box orientation={Gtk.Orientation.VERTICAL}>
                         <label
                             class="summary"
-                            halign={Gtk.Align.START}
+                            halign={Gtk.Align.FILL}
                             xalign={0}
                             label={n.summary}
                             ellipsize={Pango.EllipsizeMode.END}
@@ -83,10 +83,10 @@ export function Notification({ notification: n }: NotificationProps) {
                                 class="body"
                                 wrap
                                 useMarkup
-                                halign={Gtk.Align.START}
+                                halign={Gtk.Align.FILL}
                                 xalign={0}
                                 justify={Gtk.Justification.FILL}
-                                label={n.body}
+                                label={Utils.truncateString(n.body, 200)}
                             />
                         )}
                     </box>

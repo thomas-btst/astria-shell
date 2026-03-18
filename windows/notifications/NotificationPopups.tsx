@@ -11,6 +11,7 @@ interface Notif {
 }
 
 const animationDuration = 130
+
 export default function NotificationPopups() {
     const notifd = AstalNotifd.get_default()
     const desktopManager = DesktopManager.get_default()
