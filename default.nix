@@ -12,7 +12,7 @@ in {
   options.custom.desktop.ags.enable = lib.mkEnableOption "AGS";
 
   config = mkIf cfg.enable {
-    custom.desktop.manager.autostart = [["${config.programs.ags.finalPackage}/bin/ags" "run"]];
+    custom.desktop.manager.autostart = [[(getExe config.programs.ags.finalPackage) "run"]];
 
     programs.ags = {
       enable = true;

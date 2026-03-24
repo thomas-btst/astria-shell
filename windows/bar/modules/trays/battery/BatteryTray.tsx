@@ -50,7 +50,7 @@ export const BatteryTray: TrayItem = {
                 class="battery"
                 cursor={Cursor.POINTER}
                 onClicked={() => {
-                    execAsync("xdg-terminal-exec --hold btop").catch(console.error)
+                    execAsync("xdg-terminal-exec btop").catch(console.error)
                 }}
                 tooltipText={batteryTimeTo}
             >
