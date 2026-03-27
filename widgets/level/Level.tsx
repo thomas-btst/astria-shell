@@ -65,13 +65,13 @@ export class Level extends MultiWindowOverlay {
                         inverted={false}
                     />
                     <box $type="overlay" sensitive={false} halign={Gtk.Align.CENTER}>
-                        <Spacer reveal={val((val) => val > 0.45 && val < 0.5)} spacing={spacerSize} />
+                        <Spacer reveal={val((val) => val > 0.425 && val < 0.5)} spacing={spacerSize} />
                         <image
                             cssClasses={val((val) => Utils.classNames(val < 0.5 && "low"))}
                             iconName={icon}
                             pixelSize={iconSize}
                         />
-                        <Spacer reveal={val((val) => val < 0.55 && val >= 0.5)} spacing={spacerSize} />
+                        <Spacer reveal={val((val) => val < 0.575 && val >= 0.5)} spacing={spacerSize} />
                     </box>
                     <Gtk.EventControllerMotion
                         onEnter={() => {

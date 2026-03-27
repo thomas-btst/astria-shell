@@ -3,7 +3,7 @@ import { Gtk } from "ags/gtk4"
 
 interface SpacerProps {
     reveal: Accessor<boolean>
-    spacing: number
+    spacing: number | Accessor<number>
 }
 
 export function Spacer({ reveal, spacing }: SpacerProps) {
