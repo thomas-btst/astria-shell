@@ -3,6 +3,7 @@ import { Accessor } from "ags"
 export namespace DesktopManagerInterface {
     export interface Client {
         readonly className: string
+        readonly title: string
         readonly isFullscreen: boolean
     }
 

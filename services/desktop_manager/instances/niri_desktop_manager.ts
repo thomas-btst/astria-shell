@@ -31,6 +31,7 @@ enum Action {
 enum Event {
     WINDOW_LAYOUTS_CHANGED = "WindowLayoutsChanged",
     WINDOW_FOCUS_CHANGED = "WindowFocusChanged",
+    WINDOW_OPENED_OR_CHANGED = "WindowOpenedOrChanged",
     WORKSPACE_ACTIVE_WINDOW_CHANGED = "WorkspaceActiveWindowChanged",
     WORKSPACES_CHANGED = "WorkspacesChanged",
     WORKSPACE_ACTIVATED = "WorkspaceActivated",
@@ -103,6 +104,7 @@ export class NiriDesktopManager implements DesktopManagerInterface {
                     const [offsetX, offsetY] = data.layout.window_offset_in_tile
                     client = {
                         className: data.app_id,
+                        title: data.title,
                         isFullscreen: offsetX === 0 && offsetY === 0,
                     }
                 }
@@ -173,6 +175,9 @@ export class NiriDesktopManager implements DesktopManagerInterface {
                         this.updateFocusedClient()
                         break
                     case Event.WORKSPACE_ACTIVE_WINDOW_CHANGED.toString():
+                        this.updateFocusedClient()
+                        break
+                    case Event.WINDOW_OPENED_OR_CHANGED.toString():
                         this.updateFocusedClient()
                         break
                     case Event.WINDOW_LAYOUTS_CHANGED.toString():

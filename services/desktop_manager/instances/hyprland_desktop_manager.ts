@@ -28,9 +28,11 @@ export class HyrplandDesktopManager implements DesktopManagerInterface {
             const focusedClient = get(focusedClientBinding)
             if (focusedClient === null) return null
             const className = get(createBinding(focusedClient, "class"))
+            const title = get(createBinding(focusedClient, "title"))
             const fullscreen = get(createBinding(focusedClient, "fullscreen"))
             return {
                 className,
+                title,
                 isFullscreen: fullscreen === AstalHyprland.Fullscreen.FULLSCREEN,
             }
         })

@@ -6,7 +6,6 @@ import { Cursor } from "../../../../utils/gtk"
 import { Env } from "../../../../utils/env"
 import { Utils } from "../../../../utils/utils"
 import { DesktopManager } from "../../../../services/desktop_manager/desktop_manager_service"
-import { DesktopManagerInterface } from "../../../../services/desktop_manager/desktop_manager_interface"
 
 export function WindowInfoModule() {
     const apps = new Apps.Apps()
@@ -15,25 +14,29 @@ export function WindowInfoModule() {
 
     const [revealIcon, setRevealIcon] = createState(false) //?TODO always display the icon
 
-    const className = desktopManager.focusedClient((client: DesktopManagerInterface.Client | null) => client?.className)
+    function findAppByProps(match: string, accessors: ((app: Apps.Application) => string)[]) {
+        for (const accessProp of accessors) {
+            const foundApp =
+                apps.list.find((app) => accessProp(app) === match) ??
+                apps.list.find((app) => Utils.compareStringsCaseInsensitive(accessProp(app), match))
+            if (foundApp) return foundApp
+        }
+        return null
+    }
 
     const windowProps = createComputed((get) => {
-        const _className = get(className)
-        if (!_className)
+        const client = get(desktopManager.focusedClient)
+        if (!client)
             return {
                 title: "Bureau",
                 icon: "computer",
             }
         const app =
-            apps.list.find((app) => app.wmClass === _className) ??
-            apps.list.find((app) => Utils.compareStringsCaseInsensitive(app.wmClass, _className)) ??
-            apps.list.find((app) => app.name === _className) ??
-            apps.list.find((app) => Utils.compareStringsCaseInsensitive(app.name, _className)) ??
-            apps.list.find((app) => Utils.compareStringsCaseInsensitive(app.iconName, _className)) ??
-            apps.list.find((app) => app.iconName === _className)
+            findAppByProps(client.className, [(app) => app.wmClass, (app) => app.name, (app) => app.iconName]) ??
+            findAppByProps(client.title, [(app) => app.name])
         return {
-            title: Utils.capitalize(app?.name ?? _className),
-            icon: app?.iconName ?? _className,
+            title: Utils.capitalize(app?.name ?? client.className),
+            icon: app?.iconName ?? client.className,
             isFile: app?.iconName ? Utils.fileExists(app.iconName) : false,
         }
     })
