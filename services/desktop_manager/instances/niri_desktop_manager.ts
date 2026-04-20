@@ -2,6 +2,7 @@ import { Accessor, createComputed, createState, Setter } from "ags"
 import { DesktopManagerInterface } from "../desktop_manager_interface"
 import Gio from "gi://Gio?version=2.0"
 import GLib from "gi://GLib?version=2.0"
+import { Gdk } from "ags/gtk4"
 
 const NIRI_SOCKET = "NIRI_SOCKET"
 
@@ -52,6 +53,7 @@ interface FocusedWindow {
 interface Workspace {
     id: number
     idx: number
+    output: string
     is_active: boolean
     is_focused: boolean
     active_window_id: number | null
@@ -83,6 +85,12 @@ export class NiriDesktopManager implements DesktopManagerInterface {
         this.actionNiriSocket(Action.FOCUS_WORKSPACE, { reference: { Index: workspaceId } }).catch((e) => {
             console.error("Failed to focus niri workspace :", e)
         })
+    }
+
+    workspacesByMonitor(monitor: Gdk.Monitor): Accessor<DesktopManagerInterface.Workspace[]> {
+        return this.workspaces((workspaces) =>
+            workspaces.filter((workspace) => workspace.monitor === monitor.connector),
+        )
     }
 
     constructor() {
@@ -122,7 +130,7 @@ export class NiriDesktopManager implements DesktopManagerInterface {
                     updatedSet.length !== oldSet.size || updatedSet.some((workspace) => !oldSet.has(workspace))
 
                 const focusedWorkspaces = workspaces
-                    .filter((workspace) => workspace.is_focused)
+                    .filter((workspace) => workspace.is_active)
                     .map((workspace) => workspace.id)
 
                 const emptyWorkspaces = workspaces
@@ -137,8 +145,9 @@ export class NiriDesktopManager implements DesktopManagerInterface {
 
                 const ws = workspaces
                     .sort((w1, w2) => w1.idx - w2.idx)
-                    .map(({ id }) => ({
-                        id,
+                    .map<DesktopManagerInterface.Workspace>(({ id, idx, output }) => ({
+                        id: idx,
+                        monitor: output,
                         state: createComputed((get) => {
                             if (get(this.focusedWorkspaces).has(id))
                                 return DesktopManagerInterface.Workspace.State.FOCUSED

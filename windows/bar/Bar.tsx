@@ -1,5 +1,5 @@
 import app from "ags/gtk4/app"
-import { Astal, Gtk } from "ags/gtk4"
+import { Astal, Gdk, Gtk } from "ags/gtk4"
 import { Env } from "../../utils/env"
 import { ClockModule } from "./modules/clock/ClockModule"
 import { SeparatorModule } from "./modules/separator/SeparatorModule"
@@ -7,6 +7,10 @@ import { PowerMenuModule } from "./modules/powermenu/PowerMenuModule"
 import { WindowInfoModule } from "./modules/windowinfo/WindowInfoModule"
 import { WorkspacesModule } from "./modules/workspaces/WorkspacesModule"
 import { TraysModule } from "./modules/trays/TraysModule"
+
+interface MonitorProps {
+    monitor: Gdk.Monitor
+}
 
 interface ModuleBoxProps {
     halign: Gtk.Align
@@ -22,11 +26,11 @@ function ModuleBox({ halign, spacing = 9, children }: ModuleBoxProps) {
     )
 }
 
-function LeftModules() {
+function LeftModules({ monitor }: MonitorProps) {
     return (
         <ModuleBox halign={Gtk.Align.START} spacing={12}>
             <PowerMenuModule />
-            <WorkspacesModule />
+            <WorkspacesModule monitor={monitor} />
         </ModuleBox>
     )
 }
@@ -49,7 +53,7 @@ function RightModules() {
     )
 }
 
-export default function Bar() {
+export default function Bar(monitor: Gdk.Monitor) {
     const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
 
     return (
@@ -57,6 +61,7 @@ export default function Bar() {
             visible
             name="bar"
             class="bar"
+            gdkmonitor={monitor}
             exclusivity={Astal.Exclusivity.EXCLUSIVE}
             anchor={TOP | LEFT | RIGHT}
             layer={Astal.Layer.TOP}
@@ -66,7 +71,7 @@ export default function Bar() {
             application={app}
         >
             <centerbox cssName="centerbox">
-                <LeftModules $type="start" />
+                <LeftModules $type="start" monitor={monitor} />
                 <CenterModules $type="center" />
                 <RightModules $type="end" />
             </centerbox>

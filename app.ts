@@ -11,7 +11,7 @@ app.start({
     css: style,
     icons: `${SRC}/icons`,
     main() {
-        Bar()
+        app.monitors.forEach(Bar)
         PowerMenu.Window()
         Levels.forEach((level) => level.Window())
         NotificationPopups()

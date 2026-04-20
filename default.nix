@@ -25,7 +25,7 @@ in {
         [
           #--- Astal libraries ---
           apps
-          battery
+          battery #TODO install and setup upower
           bluetooth
           hyprland
           mpris
