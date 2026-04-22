@@ -57,9 +57,15 @@ function WorkspaceButton({ id, index, state }: WorkspaceButtonProps) {
 export function WorkspacesModule({ monitor }: WorkspacesModuleProps) {
     const desktopManager = DesktopManager.get_default()
 
+    const monitorWorkspaces: Accessor<DesktopManagerInterface.Workspace[]> = desktopManager.displayWorkspacesPerMonitor
+        ? createComputed((get) =>
+              get(desktopManager.workspaces).filter((workspace) => get(workspace.monitor) == monitor.connector),
+          )
+        : desktopManager.workspaces
+
     return (
         <box class="workspaces">
-            <For each={desktopManager.workspacesByMonitor(monitor)} id={(workspace) => workspace.id}>
+            <For each={monitorWorkspaces} id={(workspace) => workspace.id}>
                 {(workspace, index) => <WorkspaceButton id={workspace.id} index={index} state={workspace.state} />}
             </For>
         </box>

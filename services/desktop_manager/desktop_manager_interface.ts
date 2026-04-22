@@ -1,5 +1,4 @@
 import { Accessor } from "ags"
-import { Gdk } from "ags/gtk4"
 
 export namespace DesktopManagerInterface {
     export interface Client {
@@ -19,7 +18,7 @@ export namespace DesktopManagerInterface {
 
     export interface Workspace {
         readonly id: number
-        readonly monitor: string | null
+        readonly monitor: Accessor<string | null>
         readonly state: Accessor<Workspace.State>
     }
 }
@@ -28,6 +27,6 @@ export interface DesktopManagerInterface {
     readonly focusedClient: Accessor<DesktopManagerInterface.Client | null>
     readonly workspaces: Accessor<Array<DesktopManagerInterface.Workspace>>
     readonly isSpecialWorkspace: Accessor<boolean>
+    readonly displayWorkspacesPerMonitor: boolean
     focusWorkspace(workspaceId: number): void
-    workspacesByMonitor(monitor: Gdk.Monitor): Accessor<DesktopManagerInterface.Workspace[]>
 }

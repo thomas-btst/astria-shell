@@ -1,10 +1,11 @@
 import AstalHyprland from "gi://AstalHyprland?version=0.1"
 import { DesktopManagerInterface } from "../desktop_manager_interface"
-import { Accessor, createBinding, createComputed } from "ags"
-import { Gdk } from "ags/gtk4"
+import { Accessor, createBinding, createComputed, createState } from "ags"
 
 export class HyrplandDesktopManager implements DesktopManagerInterface {
     private hyprland = AstalHyprland.get_default()
+
+    public displayWorkspacesPerMonitor = false
 
     public focusedClient: Accessor<DesktopManagerInterface.Client | null>
 
@@ -18,10 +19,6 @@ export class HyrplandDesktopManager implements DesktopManagerInterface {
         )
         if (focusedWorkspace?.id === workspaceId) this.hyprland.dispatch("togglespecialworkspace", "magic")
         else this.hyprland.dispatch("workspace", workspaceId.toString())
-    }
-
-    workspacesByMonitor(_: Gdk.Monitor): Accessor<DesktopManagerInterface.Workspace[]> {
-        return this.workspaces
     }
 
     constructor() {
@@ -58,13 +55,13 @@ export class HyrplandDesktopManager implements DesktopManagerInterface {
         const workspaces = Array.from({ length: 10 }, (_, i) => i + 1)
         const focusedWorkspace = createBinding(this.hyprland, "focusedWorkspace")
 
-        this.workspaces = createComputed<DesktopManagerInterface.Workspace[]>((get) =>
+        this.workspaces = createState(
             workspaces.map<DesktopManagerInterface.Workspace>((id) => {
                 const isFocused = focusedWorkspace((fw) => fw.id === id)
                 const isUnoccupied = hyprlandWorkspacesMap((ws) => !ws.has(id))
                 return {
                     id,
-                    monitor: get(hyprlandWorkspacesMap).get(id)?.monitor.name ?? null,
+                    monitor: hyprlandWorkspacesMap((workspaces) => workspaces.get(id)?.monitor.name ?? null),
                     state: createComputed((get) => {
                         if (get(isFocused)) return DesktopManagerInterface.Workspace.State.FOCUSED
                         if (get(isUnoccupied))
@@ -74,6 +71,6 @@ export class HyrplandDesktopManager implements DesktopManagerInterface {
                     }),
                 }
             }),
-        )
+        )[0]
     }
 }

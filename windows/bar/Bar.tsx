@@ -1,4 +1,5 @@
 import app from "ags/gtk4/app"
+import { onCleanup } from "ags"
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 import { Env } from "../../utils/env"
 import { ClockModule } from "./modules/clock/ClockModule"
@@ -53,7 +54,7 @@ function RightModules() {
     )
 }
 
-export default function Bar(monitor: Gdk.Monitor) {
+export default function Bar({ monitor }: MonitorProps) {
     const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
 
     return (
@@ -62,6 +63,11 @@ export default function Bar(monitor: Gdk.Monitor) {
             name="bar"
             class="bar"
             gdkmonitor={monitor}
+            $={(self) => {
+                onCleanup(() => {
+                    self.destroy()
+                })
+            }}
             exclusivity={Astal.Exclusivity.EXCLUSIVE}
             anchor={TOP | LEFT | RIGHT}
             layer={Astal.Layer.TOP}

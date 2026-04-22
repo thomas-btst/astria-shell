@@ -2,7 +2,6 @@ import { Accessor, createComputed, createState, Setter } from "ags"
 import { DesktopManagerInterface } from "../desktop_manager_interface"
 import Gio from "gi://Gio?version=2.0"
 import GLib from "gi://GLib?version=2.0"
-import { Gdk } from "ags/gtk4"
 
 const NIRI_SOCKET = "NIRI_SOCKET"
 
@@ -63,8 +62,14 @@ interface Overview {
     is_open: boolean
 }
 
+interface NiriDesktopManagerWorkspace extends DesktopManagerInterface.Workspace {
+    idx: number
+}
+
 export class NiriDesktopManager implements DesktopManagerInterface {
     private socketPath = GLib.getenv(NIRI_SOCKET)
+
+    public displayWorkspacesPerMonitor = true
 
     public focusedClient: Accessor<DesktopManagerInterface.Client | null>
     private setFocusedClient: Setter<DesktopManagerInterface.Client | null>
@@ -72,8 +77,8 @@ export class NiriDesktopManager implements DesktopManagerInterface {
     public isSpecialWorkspace: Accessor<boolean>
     private setIsSpecialWorkspace: Setter<boolean>
 
-    public workspaces: Accessor<DesktopManagerInterface.Workspace[]>
-    private setWorkspaces: Setter<DesktopManagerInterface.Workspace[]>
+    public workspaces: Accessor<NiriDesktopManagerWorkspace[]>
+    private setWorkspaces: Setter<NiriDesktopManagerWorkspace[]>
 
     private focusedWorkspaces: Accessor<Set<number>>
     private setFocusedWorkspaces: Setter<Set<number>>
@@ -81,24 +86,24 @@ export class NiriDesktopManager implements DesktopManagerInterface {
     private emptyWorkspaces: Accessor<Set<number>>
     private setEmptyWorkspaces: Setter<Set<number>>
 
-    focusWorkspace(workspaceId: number): void {
-        this.actionNiriSocket(Action.FOCUS_WORKSPACE, { reference: { Index: workspaceId } }).catch((e) => {
-            console.error("Failed to focus niri workspace :", e)
-        })
-    }
+    private workspacesMonitor: Accessor<Map<number, string>>
+    private setWorkspaceMonitor: Setter<Map<number, string>>
 
-    workspacesByMonitor(monitor: Gdk.Monitor): Accessor<DesktopManagerInterface.Workspace[]> {
-        return this.workspaces((workspaces) =>
-            workspaces.filter((workspace) => workspace.monitor === monitor.connector),
-        )
+    focusWorkspace(workspaceId: number): void {
+        const workspace = this.workspaces().find((workspace) => workspace.id === workspaceId)
+        if (workspace)
+            this.actionNiriSocket(Action.FOCUS_WORKSPACE, { reference: { Index: workspace.idx } }).catch((e) => {
+                console.error("Failed to focus niri workspace :", e)
+            })
     }
 
     constructor() {
         ;[this.focusedClient, this.setFocusedClient] = createState<DesktopManagerInterface.Client | null>(null)
         ;[this.isSpecialWorkspace, this.setIsSpecialWorkspace] = createState(false)
-        ;[this.workspaces, this.setWorkspaces] = createState<DesktopManagerInterface.Workspace[]>([])
+        ;[this.workspaces, this.setWorkspaces] = createState<NiriDesktopManagerWorkspace[]>([])
         ;[this.focusedWorkspaces, this.setFocusedWorkspaces] = createState(new Set())
         ;[this.emptyWorkspaces, this.setEmptyWorkspaces] = createState(new Set())
+        ;[this.workspacesMonitor, this.setWorkspaceMonitor] = createState(new Map<number, string>())
         this.handleNiriEvents()
         this.updateFocusedClient()
         this.updateWorkspaces()
@@ -137,6 +142,8 @@ export class NiriDesktopManager implements DesktopManagerInterface {
                     .filter((workspace) => workspace.active_window_id === null)
                     .map((workspace) => workspace.id)
 
+                this.setWorkspaceMonitor(new Map(workspaces.map(({ id, output }) => [id, output])))
+
                 if (hasSetChanged(focusedWorkspaces, this.focusedWorkspaces()))
                     this.setFocusedWorkspaces(new Set(focusedWorkspaces))
 
@@ -145,9 +152,10 @@ export class NiriDesktopManager implements DesktopManagerInterface {
 
                 const ws = workspaces
                     .sort((w1, w2) => w1.idx - w2.idx)
-                    .map<DesktopManagerInterface.Workspace>(({ id, idx, output }) => ({
-                        id: idx,
-                        monitor: output,
+                    .map<NiriDesktopManagerWorkspace>(({ id, idx }) => ({
+                        id,
+                        idx,
+                        monitor: this.workspacesMonitor((workspacesMonitor) => workspacesMonitor.get(id) ?? null),
                         state: createComputed((get) => {
                             if (get(this.focusedWorkspaces).has(id))
                                 return DesktopManagerInterface.Workspace.State.FOCUSED
