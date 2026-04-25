@@ -26,7 +26,7 @@ export function AudioEndpointTray({
     )
 
     return {
-        status: muted((isMuted) => (isMuted ? TrayItem.Status.Collapsed : TrayItem.Status.Visible)),
+        status: muted((isMuted) => (isMuted ? TrayItem.Status.Collapsed : TrayItem.Status.Visible)), // TODO hide if no endpoint is available
         Tray: () => (
             <box
                 class={className}

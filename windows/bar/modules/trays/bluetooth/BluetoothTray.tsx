@@ -22,7 +22,7 @@ const connectedDevicesCount = createComputed((get) => {
 })
 
 export const BluetoothTray: TrayItem = {
-    status: powered((powered) => (powered ? TrayItem.Status.Visible : TrayItem.Status.Collapsed)),
+    status: powered((powered) => (powered ? TrayItem.Status.Visible : TrayItem.Status.Collapsed)), // TODO hide if bluetooth manager is not available
     Tray: () => (
         <image
             class="bluetooth"

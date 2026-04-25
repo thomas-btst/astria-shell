@@ -32,7 +32,7 @@ const isPrimary = createBinding(
 export const WifiTray: TrayItem = {
     status: createComputed((get) =>
         get(isWifi) && get(isPrimary) ? TrayItem.Status.Visible : TrayItem.Status.Collapsed,
-    ),
+    ), // TODO hide if networkmanager is not available
     Tray() {
         const title = createComputed((get) => {
             if (!get(isWifi)) return "Désactivé"
