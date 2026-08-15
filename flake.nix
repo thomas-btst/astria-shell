@@ -1,9 +1,11 @@
 {
   inputs = {
-    main-config.url = "path:../../..";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
 
-    nixpkgs.follows = "main-config/nixpkgs";
-    ags.follows = "main-config/ags";
+    ags = {
+      url = "github:aylur/ags";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -11,25 +13,46 @@
     ags,
     ...
   }: let
-    system = "x86_64-linux";
+    system = "x86_64-linux"; # TODO import all systems
+    agsPkgs = ags.packages.${system};
     pkgs = import nixpkgs {
       inherit system;
     };
+    extraPackages = with agsPkgs;
+      [
+        #--- Astal libraries ---
+        apps
+        battery #TODOs install and setup upower
+        bluetooth
+        hyprland
+        mpris
+        network
+        notifd
+        powerprofiles
+        tray
+        wireplumber
+      ]
+      ++ (with pkgs; [
+        #--- Packages ---
+        noto-fonts
+        xdg-terminal-exec
+        blueman
+        btop
+        libadwaita
+        libnotify
+        networkmanager_dmenu
+        pavucontrol
+        uutils-coreutils-noprefix
+        wofi
+      ]);
   in {
-    devShells.${system}.default = pkgs.mkShell {
-      buildInputs = [ags.packages.${system}.agsFull];
+    homeModules.default.imports = [
+      ags.homeManagerModules.default
+      (import ./module.nix extraPackages)
+    ];
 
-      shellHook = ''
-        ags types -d ./
-
-        ${pkgs.nodejs}/bin/npm install
-
-        SOURCE="$HOME/.local/share/ags"
-
-        if [ -d "$SOURCE" ]; then
-          ln -sfn "$SOURCE" ./node_modules/ags
-        fi
-      '';
+    devShells.${system} = import ./shell.nix {
+      inherit pkgs agsPkgs extraPackages;
     };
   };
 }
