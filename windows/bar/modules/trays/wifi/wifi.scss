@@ -1,7 +1,0 @@
-@use "../../../../../style/env";
-
-@mixin wifi {
-    .wifi image {
-        color: env.$primary;
-    }
-}

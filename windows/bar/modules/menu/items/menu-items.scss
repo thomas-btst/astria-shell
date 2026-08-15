@@ -1,0 +1,41 @@
+@use "../../../../../style/env";
+@use "default/default" as *;
+@use "wifi/wifi" as *;
+@use "ethernet/ethernet" as *;
+@use "battery/battery" as *;
+@use "audio/speaker/speaker" as *;
+@use "audio/microphone/microphone" as *;
+@use "bluetooth/bluetooth" as *;
+@use "idle/idle" as *;
+
+@mixin menu-items {
+    .menu-items {
+        >box {
+            margin: 4px 0;
+            border-radius: env.$border-radius;
+        }
+
+        margin-right: -4px;
+
+        &:hover>box {
+            background-color: env.$primary;
+
+            * {
+                color: env.$bg;
+            }
+        }
+
+        .item>* {
+            padding: 0 6px;
+        }
+
+        @include default;
+        @include wifi;
+        @include ethernet;
+        @include battery;
+        @include speaker;
+        @include microphone;
+        @include bluetooth;
+        @include idle;
+    }
+}

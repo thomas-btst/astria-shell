@@ -1,0 +1,7 @@
+@use "../../../../../../style/env";
+
+@mixin default {
+    .default {
+        color: env.$primary;
+    }
+}

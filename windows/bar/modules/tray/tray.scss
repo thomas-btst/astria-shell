@@ -1,0 +1,38 @@
+@use "../../../../style/env";
+
+@mixin tray {
+    .tray {
+        color: env.$fg;
+        transition: all 0.2s;
+
+        >button {
+            padding: 0px 2px;
+        }
+
+        &:hover {
+            color: env.$primary;
+        }
+
+        >popover>contents {
+            color: env.$fg;
+            padding: 6px 0;
+            border-radius: env.$border-radius;
+            border: 1px solid env.$bg-alt;
+            background-color: rgba($color: env.$bg, $alpha: env.$opacity);
+
+            .item {
+                margin: 0 6px;
+
+                image {
+                    padding: 6px;
+                    border-radius: env.$border-radius;
+
+                    &:hover {
+                        color: env.$bg;
+                        background-color: rgba($color: env.$primary, $alpha: 0.80);
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,6 +1,7 @@
 import { getter, gtype, property, register } from "ags/gobject"
 import AstalBattery from "gi://AstalBattery?version=0.1"
 import GObject from "ags/gobject"
+import { Utils } from "../utils/utils"
 
 @register()
 export class Battery extends GObject.Object {
@@ -21,14 +22,33 @@ export class Battery extends GObject.Object {
         return Math.round(this.battery.percentage * 100)
     }
 
+    @getter(String)
+    get timeToEmptyOrFull() {
+        const seconds = Math.max(this.battery.timeToFull, this.battery.timeToEmpty)
+        const totalMinutes = Math.trunc(seconds / 60)
+        const minutes = totalMinutes % 60
+        const hours = Math.trunc(totalMinutes / 60)
+        return `${Utils.Number.withDigits(hours)}:${Utils.Number.withDigits(minutes)}`
+    }
+
     constructor() {
         super()
+
         this.battery.connect("notify::percentage", () => {
             this.updateState()
             this.notify("percent")
         })
+
         this.battery.connect("notify::charging", () => {
             this.updateState()
+        })
+
+        this.battery.connect("notify::time-to-empty", () => {
+            this.notify("time-to-empty-or-full")
+        })
+
+        this.battery.connect("notify::time-to-full", () => {
+            this.notify("time-to-empty-or-full")
         })
     }
 

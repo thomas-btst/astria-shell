@@ -1,7 +1,0 @@
-@use "../../../../../../style/env";
-
-@mixin speaker {
-    .speaker {
-        color: env.$primary;
-    }
-}

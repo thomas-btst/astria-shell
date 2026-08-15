@@ -1,0 +1,7 @@
+@use "./idle/idle" as *;
+
+@mixin header {
+    .header {
+        @include idle;
+    }
+}

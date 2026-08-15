@@ -1,9 +1,8 @@
 @use "../../style/env";
+@use "../../style/util";
 
 window.level {
-    * {
-        all: unset;
-    }
+    @include util.unsetAll;
 
     image {
         color: env.$bg;

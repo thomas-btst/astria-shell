@@ -1,0 +1,15 @@
+@use "../../../../style/env";
+
+@mixin launcher {
+    .launcher {
+        image {
+            color: env.$primary;
+            transition: transform 0.18s ease-in-out;
+            border-radius: env.$border-radius;
+        }
+
+        &:hover image {
+            transform: rotate(-90deg);
+        }
+    }
+}

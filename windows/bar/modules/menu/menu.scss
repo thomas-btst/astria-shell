@@ -1,0 +1,12 @@
+@use "menu-popup/menu-popup" as *;
+@use "items/menu-items" as *;
+
+@mixin menu {
+    .menu {
+        popover>contents {
+            @include menu-popup;
+        }
+
+        @include menu-items;
+    }
+}

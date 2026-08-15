@@ -1,15 +1,17 @@
 @use "separator/separator" as *;
 @use "clock/clock" as *;
-@use "powermenu/powermenu" as *;
+@use "launcher/launcher" as *;
 @use "windowinfo/windowinfo" as *;
 @use "workspaces/workspaces" as *;
-@use "trays/trays" as *;
+@use "tray/tray" as *;
+@use "menu/menu" as *;
 
 @mixin modules {
     @include separator;
     @include clock;
-    @include powermenu;
+    @include launcher;
     @include windowinfo;
     @include workspaces;
-    @include trays;
+    @include tray;
+    @include menu;
 }

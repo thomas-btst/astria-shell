@@ -1,0 +1,8 @@
+@use "../../../../../../../style/env";
+
+@mixin idle {
+    .idle {
+        color: env.$bg;
+        background-color: env.$yellow;
+    }
+}

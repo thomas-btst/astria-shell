@@ -1,0 +1,13 @@
+@use "../../../../../style/env";
+@use "./header/header" as *;
+
+@mixin menu-popup {
+    .menu-popup {
+        background-color: rgba($color: env.$bg, $alpha: env.$opacity);
+        border: 1px solid env.$bg-alt;
+        border-radius: env.$border-radius;
+        padding: 6px 10px;
+
+        @include header;
+    }
+}

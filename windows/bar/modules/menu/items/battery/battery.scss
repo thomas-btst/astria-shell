@@ -1,0 +1,21 @@
+@use "../../../../../../style/env";
+
+@mixin battery {
+    .battery {
+        >.discharging {
+            color: env.$fg;
+        }
+
+        >.charging {
+            color: env.$secondary;
+        }
+
+        >.full {
+            color: env.$primary;
+        }
+
+        >.low {
+            color: env.$red;
+        }
+    }
+}

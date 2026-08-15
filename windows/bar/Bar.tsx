@@ -4,10 +4,11 @@ import { Astal, Gdk, Gtk } from "ags/gtk4"
 import { Env } from "../../utils/env"
 import { ClockModule } from "./modules/clock/ClockModule"
 import { SeparatorModule } from "./modules/separator/SeparatorModule"
-import { PowerMenuModule } from "./modules/powermenu/PowerMenuModule"
+import { LauncherModule } from "./modules/launcher/LauncherModule"
 import { WindowInfoModule } from "./modules/windowinfo/WindowInfoModule"
 import { WorkspacesModule } from "./modules/workspaces/WorkspacesModule"
-import { TraysModule } from "./modules/trays/TraysModule"
+import { TrayModule } from "./modules/tray/TrayModule"
+import { MenuModule } from "./modules/menu/MenuModule"
 
 interface MonitorProps {
     monitor: Gdk.Monitor
@@ -30,7 +31,7 @@ function ModuleBox({ halign, spacing = 9, children }: ModuleBoxProps) {
 function LeftModules({ monitor }: MonitorProps) {
     return (
         <ModuleBox halign={Gtk.Align.START} spacing={12}>
-            <PowerMenuModule />
+            <LauncherModule />
             <WorkspacesModule monitor={monitor} />
         </ModuleBox>
     )
@@ -47,7 +48,8 @@ function CenterModules() {
 function RightModules() {
     return (
         <ModuleBox halign={Gtk.Align.END}>
-            <TraysModule />
+            <TrayModule />
+            <MenuModule />
             <SeparatorModule />
             <ClockModule />
         </ModuleBox>
