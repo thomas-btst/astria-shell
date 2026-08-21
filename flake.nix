@@ -53,8 +53,12 @@
     in {
       imports = [
         ags.homeManagerModules.default
-        (import ./module.nix extraPackages)
+        ./module.nix
       ];
+
+      _module.args = {
+        inherit extraPackages;
+      };
     };
 
     devShells = eachSystem (

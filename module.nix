@@ -1,7 +1,8 @@
-extraPackages: {
+{
   lib,
   config,
   options,
+  extraPackages,
   ...
 }:
 with lib; let
