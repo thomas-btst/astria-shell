@@ -48,7 +48,7 @@
         ]);
   in {
     homeModules.default = {pkgs, ...}: let
-      agsPkgs = ags.packages.${pkgs.system};
+      agsPkgs = ags.packages.${pkgs.stdenv.hostPlatform.system};
       extraPackages = mkExtraPackages {inherit pkgs agsPkgs;};
     in {
       imports = [
