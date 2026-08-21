@@ -42,7 +42,7 @@
   - **Fullscreen Awareness**: Automatically adapts exclusivity and layout when a fullscreen window is active.
 
 - **Power Menu (Session Controls)**
-  - Fullscreen overlay modal with session controls: *Shutdown*, *Reboot*, *Logout*, *Lock Screen*, and *Suspend*.
+  - Fullscreen overlay modal with session controls: _Shutdown_, _Reboot_, _Logout_, _Lock Screen_, and _Suspend_.
   - Full keyboard navigation support (Arrow keys, Vim keys `h/j/k/l`, `Enter`, and `Escape`).
 
 <p align="center">
@@ -57,7 +57,7 @@
 
 - **Modular SCSS Theming**
   - Clean, modern aesthetic with GTK4 CSS styling.
-  - Support for multiple color themes (*Dark*, *Light*, *Nordic*).
+  - Support for multiple color themes (_Dark_, _Light_, _Nordic_).
 
 ## Technologies
 
@@ -83,7 +83,7 @@ Astria Shell provides a Home Manager module in `flake.nix`.
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    
+
     astria-shell = {
       url = "github:thomas-btst/astria-shell";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -92,7 +92,7 @@ Astria Shell provides a Home Manager module in `flake.nix`.
 }
 ```
 
-2. **Import the Home Manager module:**
+1. **Import the Home Manager module:**
 
 ```nix
 { inputs, ... }: {
@@ -108,7 +108,7 @@ Astria Shell provides a Home Manager module in `flake.nix`.
 
 ### Development Setup
 
-To run Astria Shell locally in a development shell:
+To run Astria Shell locally in a Nix development shell:
 
 1. **Clone the repository:**
 
@@ -117,20 +117,33 @@ git clone https://github.com/thomas-btst/astria-shell.git
 cd astria-shell
 ```
 
-2. **Initialize TypeScript types and dependencies:**
+1. **Initialize TypeScript types:**
 
 ```bash
 nix develop .#init
 ```
 
-3. **Start the shell:**
+_(Generates Astal & GTK4 TypeScript definitions in `./@girs/`)_
 
-```bash
-nix develop
-```
-*(This automatically runs `ags run -d .` inside the development environment)*
+1. **Start the development environment:**
 
-4. **Linting and formatting:**
+- **Standard development shell:**
+
+  ```bash
+  nix develop
+  ```
+
+  _(Provides `ags`, `alejandra`, and dependencies without auto-launching)_
+
+- **Auto-run development shell:**
+
+  ```bash
+  nix develop .#dev
+  ```
+
+  _(Automatically executes `ags run -d .` upon entering the shell)_
+
+1. **Linting and formatting:**
 
 ```bash
 npm run lint
@@ -142,12 +155,12 @@ Astria Shell includes an IPC request handler (`request.ts`) allowing you to cont
 
 ### Commands
 
-| Action | Command | Description |
-| :--- | :--- | :--- |
-| **Toggle Power Menu** | `ags request "toggle powermenu"` | Toggles the session power menu overlay |
-| **Show Speaker OSD** | `ags request "show level speaker"` | Displays the speaker volume OSD slider |
-| **Show Mic OSD** | `ags request "show level microphone"` | Displays the microphone volume OSD slider |
-| **Show Brightness OSD** | `ags request "show level brightness"` | Displays the brightness OSD slider |
+| Action                  | Command                               | Description                               |
+| :---------------------- | :------------------------------------ | :---------------------------------------- |
+| **Toggle Power Menu**   | `ags request "toggle powermenu"`      | Toggles the session power menu overlay    |
+| **Show Speaker OSD**    | `ags request "show level speaker"`    | Displays the speaker volume OSD slider    |
+| **Show Mic OSD**        | `ags request "show level microphone"` | Displays the microphone volume OSD slider |
+| **Show Brightness OSD** | `ags request "show level brightness"` | Displays the brightness OSD slider        |
 
 ### Keybinding Examples
 
@@ -175,7 +188,7 @@ astria-shell/
 ├── request.ts              # IPC CLI request router (toggle, show)
 ├── flake.nix               # Nix Flake definition
 ├── module.nix              # Home Manager module integration
-├── shell.nix               # Nix development shells (default & init)
+├── shell.nix               # Nix development shells (default, dev & init)
 ├── style.scss              # Root SCSS stylesheet
 │
 ├── daemons/                # Background watchers (Battery, Brightness, Media)

@@ -4,9 +4,14 @@
   extraPackages,
 }: let
   ags = agsPkgs.agsFull;
+  shellPkgs = [ags pkgs.alejandra] ++ extraPackages;
 in {
   default = pkgs.mkShell {
-    buildInputs = [ags] ++ extraPackages;
+    buildInputs = shellPkgs;
+  };
+
+  dev = pkgs.mkShell {
+    buildInputs = shellPkgs;
 
     shellHook = ''
       ags run -d .
@@ -14,7 +19,7 @@ in {
   };
 
   init = pkgs.mkShell {
-    buildInputs = [ags];
+    buildInputs = shellPkgs;
 
     shellHook = ''
       ags types -d ./
