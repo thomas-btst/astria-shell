@@ -59,14 +59,14 @@ export function WorkspacesModule({ monitor }: WorkspacesModuleProps) {
 
     const monitorWorkspaces: Accessor<DesktopManagerInterface.Workspace[]> = desktopManager.displayWorkspacesPerMonitor
         ? createComputed((get) =>
-              get(desktopManager.workspaces).filter((workspace) => get(workspace.monitor) == monitor.connector),
-          )
+            get(desktopManager.workspaces).filter((workspace) => get(workspace.monitor) == monitor.connector),
+        )
         : desktopManager.workspaces
 
     return (
         <box class="workspaces">
             <For each={monitorWorkspaces} id={(workspace) => workspace.id}>
-                {(workspace, index) => <WorkspaceButton id={workspace.id} index={index} state={workspace.state} />}
+                {(workspace, index) => <WorkspaceButton id={workspace.id} index={index((index) => index + 1)} state={workspace.state} />}
             </For>
         </box>
     )
