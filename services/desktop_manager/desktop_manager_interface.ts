@@ -17,7 +17,7 @@ export namespace DesktopManagerInterface {
     }
 
     export interface Workspace {
-        readonly id: number
+        readonly id: string
         readonly monitor: Accessor<string | null>
         readonly state: Accessor<Workspace.State>
     }
@@ -28,5 +28,5 @@ export interface DesktopManagerInterface {
     readonly workspaces: Accessor<Array<DesktopManagerInterface.Workspace>>
     readonly isSpecialWorkspace: Accessor<boolean>
     readonly displayWorkspacesPerMonitor: boolean
-    focusWorkspace(workspaceId: number): void
+    focusWorkspace(workspaceId: string): void
 }

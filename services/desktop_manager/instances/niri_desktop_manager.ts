@@ -89,7 +89,7 @@ export class NiriDesktopManager implements DesktopManagerInterface {
     private workspacesMonitor: Accessor<Map<number, string>>
     private setWorkspaceMonitor: Setter<Map<number, string>>
 
-    focusWorkspace(workspaceId: number): void {
+    focusWorkspace(workspaceId: string): void {
         const workspace = this.workspaces().find((workspace) => workspace.id === workspaceId)
         if (workspace)
             this.actionNiriSocket(Action.FOCUS_WORKSPACE, { reference: { Index: workspace.idx } }).catch((e) => {
@@ -153,7 +153,7 @@ export class NiriDesktopManager implements DesktopManagerInterface {
                 const ws = workspaces
                     .sort((w1, w2) => w1.idx - w2.idx)
                     .map<NiriDesktopManagerWorkspace>(({ id, idx }) => ({
-                        id,
+                        id: id.toString(),
                         idx,
                         monitor: this.workspacesMonitor((workspacesMonitor) => workspacesMonitor.get(id) ?? null),
                         state: createComputed((get) => {

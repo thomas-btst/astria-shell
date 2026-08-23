@@ -10,7 +10,7 @@ interface WorkspacesModuleProps {
 }
 
 interface WorkspaceButtonProps {
-    id: number
+    id: string
     index: Accessor<number>
     state: Accessor<DesktopManagerInterface.Workspace.State>
 }

@@ -16,7 +16,6 @@ export class Speaker extends GObject.Object {
 
     @getter(Boolean)
     get isDefault() {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         return this.audio.defaultSpeaker.name === null
     }
 

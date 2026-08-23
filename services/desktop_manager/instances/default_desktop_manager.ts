@@ -6,11 +6,11 @@ export class DefaultDesktopManager implements DesktopManagerInterface {
     public focusedClient = createState<DesktopManagerInterface.Client | null>(null)[0]
     public workspaces = createState<DesktopManagerInterface.Workspace[]>([
         {
-            id: 1,
+            id: "1",
             monitor: createState(null)[0],
             state: createState(DesktopManagerInterface.Workspace.State.FOCUSED)[0],
         },
     ])[0]
     public isSpecialWorkspace = createState(false)[0]
-    focusWorkspace(_: number): void {}
+    focusWorkspace(_: string): void {}
 }

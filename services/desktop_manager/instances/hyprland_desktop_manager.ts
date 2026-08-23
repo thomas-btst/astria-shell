@@ -13,12 +13,12 @@ export class HyrplandDesktopManager implements DesktopManagerInterface {
 
     public workspaces: Accessor<DesktopManagerInterface.Workspace[]>
 
-    focusWorkspace(workspaceId: number): void {
+    focusWorkspace(workspaceId: string): void {
         const focusedWorkspace = this.workspaces().find(
             (workspace) => workspace.state() === DesktopManagerInterface.Workspace.State.FOCUSED,
         )
         if (focusedWorkspace?.id === workspaceId) this.hyprland.dispatch("togglespecialworkspace", "magic")
-        else this.hyprland.dispatch("workspace", workspaceId.toString())
+        else this.hyprland.dispatch("workspace", workspaceId)
     }
 
     constructor() {
@@ -60,7 +60,7 @@ export class HyrplandDesktopManager implements DesktopManagerInterface {
                 const isFocused = focusedWorkspace((fw) => fw.id === id)
                 const isUnoccupied = hyprlandWorkspacesMap((ws) => !ws.has(id))
                 return {
-                    id,
+                    id: id.toString(),
                     monitor: hyprlandWorkspacesMap((workspaces) => workspaces.get(id)?.monitor.name ?? null),
                     state: createComputed((get) => {
                         if (get(isFocused)) return DesktopManagerInterface.Workspace.State.FOCUSED
