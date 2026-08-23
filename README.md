@@ -1,6 +1,6 @@
 # Astria Shell
 
-**Astria Shell** is an elegant desktop shell for **Hyprland** and **Niri**, built with [AGS (Aylur's GTK Shell)](https://github.com/aylur/ags) v2, Astal, GTK4, TypeScript and SCSS.
+**Astria Shell** is an elegant, modular desktop shell for Wayland compositors (**Hyprland**, **Niri**, and **Mango**), built with [AGS (Aylur's GTK Shell)](https://github.com/aylur/ags) v2, Astal, GTK4, TypeScript, and SCSS.
 
 <p align="center">
   <img src="./assets/preview.png" alt="Astria Shell Preview" width="100%" />
@@ -25,21 +25,21 @@
 ## Features
 
 - **Dynamic Status Bar**
-  - **Launcher**: Quick trigger for application launchers (such as Walker / Wofi).
-  - **Workspaces**: Native, dynamic workspace indicators tailored for both **Hyprland** and **Niri** (automatically detected via `XDG_CURRENT_DESKTOP`). It can also run on other desktop environments, though the workspaces module will not update dynamically.
-  - **Window Title / Info**: Active window name and application class tracker.
-  - **System Tray**: Status Notifier Items (SNI) tray support.
-  - **Quick Menu & Status Chips**: Audio, WiFi, Ethernet, Bluetooth, Battery, and Idle Inhibit state indicators with an interactive popup menu.
-  - **Clock & Date**: Formatted date/time display.
+  - **Power Menu Launcher**: Quick trigger for the session power menu overlay.
+  - **Workspaces**: Native, dynamic workspace indicators tailored for **Hyprland**, **Niri**, and **Mango** (automatically detected via `XDG_CURRENT_DESKTOP`). Includes per-monitor workspace isolation where supported. Fallback support is available for other desktop environments.
+  - **Window Title / Info**: Active window name, application class tracker, and special workspace / fullscreen indicator.
+  - **System Tray**: Integrated Status Notifier Items (SNI) tray with a collapsible popover drawer.
+  - **Quick Menu & Status Chips**: Audio (Speaker & Microphone), Wi-Fi, Ethernet, Bluetooth, Battery, and Idle Inhibit state indicators with interactive popups and controls.
+  - **Clock & Date**: Formatted date/time display with custom tooltips.
 
 - **On-Screen Display (OSD / Levels)**
   - Interactive on-screen indicators for **Speaker Volume**, **Microphone Volume**, and **Screen Brightness**.
-  - Animated popup sliders on value changes with hover persistence and auto-dismissal.
+  - Animated popup sliders triggered on value changes or via IPC commands, with hover persistence and auto-dismissal.
 
 - **Notification Center**
-  - Built-in notification daemon and popup system using `AstalNotifd`.
+  - Built-in notification system powered by `AstalNotifd`.
   - Smooth slide animations, action buttons, and automatic dismissals.
-  - **Fullscreen Awareness**: Automatically adapts exclusivity and layout when a fullscreen window is active.
+  - **Fullscreen Awareness**: Automatically adjusts layout and exclusivity when a fullscreen window is active.
 
 - **Power Menu (Session Controls)**
   - Fullscreen overlay modal with session controls: _Shutdown_, _Reboot_, _Logout_, _Lock Screen_, and _Suspend_.
@@ -50,32 +50,32 @@
 </p>
 
 - **Background Daemons & Services**
-  - **Battery Daemon**: Real-time battery status and low-level alerts.
-  - **Brightness Daemon**: Backlight control via sysfs / brightnessctl.
-  - **Media Daemon**: Media playback tracker using MPRIS.
-  - **Idle Service**: Sleep prevention / idle inhibition management.
+  - **Battery Daemon**: Real-time battery monitoring and low-level / full-battery notifications.
+  - **Brightness Daemon**: Min-brightness safety enforcement and backlight management.
+  - **Media Daemon**: MPRIS-based media tracker that automatically pauses playing audio on sink switches or disconnections.
+  - **Idle Service**: Sleep prevention and idle inhibition manager.
 
 - **Modular SCSS Theming**
-  - Clean, modern aesthetic with GTK4 CSS styling.
-  - Support for multiple color themes (_Dark_, _Light_, _Nordic_).
+  - Modern aesthetic built on GTK4 CSS styling.
+  - Color palette switcher with bundled themes (_Dark_, _Light_, _Nordic_).
 
 ## Technologies
 
 - **Framework**: [AGS (Astal / GJS)](https://github.com/aylur/ags) + GTK4
 - **Language**: TypeScript / TSX
 - **Styling**: SCSS
-- **Packaging & Environment**: Nix Flakes + Home Manager
+- **Packaging & Environment**: Nix Flakes (Multi-architecture: `x86_64-linux`, `aarch64-linux`) + Home Manager
 
 ## Getting Started
 
 ### Prerequisites
 
 - Nix with Flakes enabled (recommended), or a working AGS v2 installation with GTK4 and Astal libraries.
-- Wayland compositor: Tailored for [Hyprland](https://hyprland.org/) and [Niri](https://github.com/YaLTeR/niri) (other compositors and desktop environments are supported as well, though the workspaces module will not update).
+- Wayland compositor: Tailored for [Hyprland](https://hyprland.org/), [Niri](https://github.com/YaLTeR/niri), and [Mango](https://github.com/mango-wc/mango) (other compositors and desktop environments are supported via fallback desktop managers).
 
 ### Installation with Nix & Home Manager
 
-Astria Shell provides a Home Manager module in `flake.nix`.
+Astria Shell provides a Home Manager module exported from `flake.nix`.
 
 1. **Add to your Flake inputs:**
 
@@ -108,7 +108,7 @@ Astria Shell provides a Home Manager module in `flake.nix`.
 
 ### Development Setup
 
-To run Astria Shell locally in a Nix development shell:
+To work on Astria Shell locally using Nix development shells:
 
 1. **Clone the repository:**
 
@@ -117,13 +117,13 @@ git clone https://github.com/thomas-btst/astria-shell.git
 cd astria-shell
 ```
 
-1. **Initialize TypeScript types:**
+1. **Initialize TypeScript types & dependencies:**
 
 ```bash
 nix develop .#init
 ```
 
-_(Generates Astal & GTK4 TypeScript definitions in `./@girs/`)_
+_(Generates Astal & GTK4 TypeScript definitions in `./@girs/`, installs node modules, and links local typings)_
 
 1. **Start the development environment:**
 
@@ -133,7 +133,7 @@ _(Generates Astal & GTK4 TypeScript definitions in `./@girs/`)_
   nix develop
   ```
 
-  _(Provides `ags`, `alejandra`, and dependencies without auto-launching)_
+  _(Provides `ags`, `alejandra`, `statix`, `deadnix`, and required dependencies)_
 
 - **Auto-run development shell:**
 
@@ -141,9 +141,9 @@ _(Generates Astal & GTK4 TypeScript definitions in `./@girs/`)_
   nix develop .#dev
   ```
 
-  _(Automatically executes `ags run -d .` upon entering the shell)_
+  _(Launches `ags run -d .` automatically upon entering the shell)_
 
-1. **Linting and formatting:**
+1. **Linting and code formatting:**
 
 ```bash
 npm run lint
@@ -151,7 +151,7 @@ npm run lint
 
 ## IPC & Remote Controls
 
-Astria Shell includes an IPC request handler (`request.ts`) allowing you to control windows and OSDs from external scripts, keybindings, or desktop manager configurations.
+Astria Shell includes an IPC request handler ([`request.ts`](./request.ts)) allowing external scripts, keybindings, or window manager configurations to trigger overlays and OSDs.
 
 ### Commands
 
@@ -168,16 +168,26 @@ Astria Shell includes an IPC request handler (`request.ts`) allowing you to cont
 
 ```ini
 # Power Menu
-bind = $mainMod, Escape, exec, ags request "toggle powermenu"
+bind = , XF86PowerOff, exec, ags request toggle powermenu
+bind = SUPER SHIFT, E, exec, ags request toggle powermenu
+
 ```
 
 #### Niri (`config.kdl`)
 
 ```kdl
 binds {
-    // Power Menu
-    Mod+Escape { spawn "ags" "request" "toggle powermenu"; }
+    Mod+Shift+E { spawn "ags" "request" "toggle powermenu"; }
+    XF86PowerOff { spawn "ags" "request" "toggle powermenu"; }
 }
+```
+
+#### Mango (`config.toml`)
+
+```toml
+# Power Menu
+bind=SUPER+SHIFT,e,spawn,ags request toggle powermenu
+bind=none,XF86PowerOff,spawn,ags request toggle powermenu
 ```
 
 ## Project Structure
@@ -186,28 +196,28 @@ binds {
 astria-shell/
 ├── app.tsx                 # AGS application entry point
 ├── request.ts              # IPC CLI request router (toggle, show)
-├── flake.nix               # Nix Flake definition
+├── flake.nix               # Multi-arch Nix Flake definition
 ├── module.nix              # Home Manager module integration
-├── shell.nix               # Nix development shells (default, dev & init)
+├── shell.nix               # Nix development environments (default, dev, init)
 ├── style.scss              # Root SCSS stylesheet
 │
 ├── daemons/                # Background watchers (Battery, Brightness, Media)
-├── services/               # System service abstractions (Audio, Battery, Idle, Desktop)
-│   └── desktop_manager/    # Wayland compositor abstraction (Hyprland, Niri)
-├── windows/                # Window definitions & overlays
-│   ├── bar/                # Top status bar & modules (workspaces, tray, menu, clock)
-│   ├── levels/             # OSD levels (speaker, microphone, brightness)
+├── services/               # Core service abstractions (Audio, Battery, Brightness, Clock)
+│   └── desktop_manager/    # Compositor abstraction layer (Hyprland, Niri, Mango, Default)
+├── windows/                # Window overlays & bar definition
+│   ├── bar/                # Status bar & modules (workspaces, trays, powermenu launcher, clock, info)
+│   ├── levels/             # OSD popups (speaker, microphone, brightness)
 │   ├── notifications/      # Notification popup overlay
-│   └── powermenu/          # Fullscreen power & session overlay
-├── widgets/                # Reusable UI widgets & overlays
-├── style/                  # Modular styles & color palettes (dark, light, nordic)
-└── utils/                  # Environment, GTK, and helper utilities
+│   └── powermenu/          # Fullscreen session overlay modal
+├── widgets/                # Reusable UI widgets & level sliders
+├── style/                  # Modular styles & color themes (dark, light, nordic)
+└── utils/                  # GTK, environment, locker, and helper utilities
 ```
 
 ## Theming & Customization
 
-- Global environment parameters such as margins and icon sizes can be configured in [`utils/env.ts`](./utils/env.ts) and [`style/env.scss`](./style/env.scss).
-- Color schemes are located under [`style/colors/`](./style/colors/).
+- Configuration parameters like bar dimensions, margins, and icon sizes can be tuned in [`utils/env.ts`](./utils/env.ts) and [`style/env.scss`](./style/env.scss).
+- Color palettes and theme variants are defined under [`style/colors/`](./style/colors/).
 
 ## Author
 

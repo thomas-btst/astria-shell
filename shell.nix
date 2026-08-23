@@ -4,7 +4,7 @@
   extraPackages,
 }: let
   ags = agsPkgs.agsFull;
-  shellPkgs = [ags pkgs.alejandra] ++ extraPackages;
+  shellPkgs = [ags pkgs.alejandra pkgs.statix pkgs.deadnix] ++ extraPackages;
 in {
   default = pkgs.mkShell {
     buildInputs = shellPkgs;
