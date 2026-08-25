@@ -62,6 +62,7 @@ export default function Bar({ monitor }: MonitorProps) {
             visible
             name="bar"
             class="bar"
+            namespace="astria-bar"
             gdkmonitor={monitor}
             $={(self) => {
                 onCleanup(() => {

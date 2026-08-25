@@ -60,7 +60,7 @@ export default function NotificationPopups() {
     return (
         <window
             class="notifications"
-            namespace="notifications"
+            namespace="astria-notifications"
             visible={notifications((ns) => ns.length > 0)}
             anchor={Astal.WindowAnchor.TOP}
             layer={Astal.Layer.OVERLAY}

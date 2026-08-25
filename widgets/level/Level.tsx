@@ -42,6 +42,7 @@ export class Level extends MultiWindowOverlay {
         super("level", {
             name: `level-${name}`,
             class: `level`,
+            namespace: "astria-level",
             anchor: Astal.WindowAnchor.BOTTOM,
             layer: Astal.Layer.OVERLAY,
             revealer: {

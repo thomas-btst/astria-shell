@@ -115,6 +115,7 @@ function PowerButtons() {
 
 export const PowerMenu = new WindowOverlay({
     class: "powermenu",
+    namespace: "astria-powermenu",
     anchor: Astal.WindowAnchor.LEFT | Astal.WindowAnchor.TOP | Astal.WindowAnchor.RIGHT | Astal.WindowAnchor.BOTTOM,
     layer: Astal.Layer.OVERLAY,
     exclusivity: Astal.Exclusivity.IGNORE,
