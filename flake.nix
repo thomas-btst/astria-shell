@@ -1,11 +1,19 @@
 {
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
+  description = "Mon environnement Nix";
 
-    ags = {
-      url = "github:aylur/ags";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+  nixConfig = {
+    extra-substituters = [
+      "https://ags.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "ags.cachix.org-1:naAvMrz0CuYqeyGNyLgE010iUiuf/qx6kYrUv3NwAJ8="
+    ];
+  };
+
+  inputs = {
+    nixpkgs.follows = "ags/nixpkgs";
+
+    ags.url = "github:aylur/ags";
   };
 
   outputs = {
