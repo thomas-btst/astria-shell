@@ -1,17 +1,17 @@
 {
   pkgs,
   agsPkgs,
-  extraPackages,
+  packages,
 }: let
   ags = agsPkgs.agsFull;
-  shellPkgs = [ags pkgs.alejandra pkgs.statix pkgs.deadnix] ++ extraPackages;
+  shellPkgs = [ags pkgs.alejandra pkgs.statix pkgs.deadnix] ++ packages;
 in {
   default = pkgs.mkShell {
-    buildInputs = shellPkgs;
+    nativeBuildInputs = shellPkgs;
   };
 
   dev = pkgs.mkShell {
-    buildInputs = shellPkgs;
+    nativeBuildInputs = shellPkgs;
 
     shellHook = ''
       ags run -d .

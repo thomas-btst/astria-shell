@@ -23,41 +23,23 @@
   }: let
     systems = ["x86_64-linux" "aarch64-linux"];
     eachSystem = nixpkgs.lib.genAttrs systems;
-    mkExtraPackages = {
-      pkgs,
-      agsPkgs,
-    }:
-      with agsPkgs;
-        [
-          #--- Astal libraries ---
-          apps
-          battery #TODOs install and setup upower
-          bluetooth
-          hyprland
-          mpris
-          network
-          notifd
-          powerprofiles
-          tray
-          wireplumber
-        ]
-        ++ (with pkgs; [
-          #--- Packages ---
-          noto-fonts
-          xdg-terminal-exec
-          blueman
-          btop
-          libadwaita
-          libnotify
-          networkmanager_dmenu
-          pavucontrol
-          uutils-coreutils-noprefix
-          wofi
-        ]);
+    mkPackages = {pkgs}:
+      with pkgs; [
+        #--- Packages ---
+        noto-fonts
+        xdg-terminal-exec
+        blueman
+        btop
+        libnotify
+        networkmanager_dmenu
+        pavucontrol
+        uutils-coreutils-noprefix
+        wofi
+      ];
   in {
     homeModules.default = {pkgs, ...}: let
       agsPkgs = ags.packages.${pkgs.stdenv.hostPlatform.system};
-      extraPackages = mkExtraPackages {inherit pkgs agsPkgs;};
+      packages = mkPackages {inherit pkgs;};
     in {
       imports = [
         ags.homeManagerModules.default
@@ -65,7 +47,7 @@
       ];
 
       _module.args = {
-        inherit extraPackages;
+        inherit packages agsPkgs;
       };
     };
 
@@ -76,8 +58,8 @@
             inherit system;
           };
           agsPkgs = ags.packages.${system};
-          extraPackages = mkExtraPackages {
-            inherit pkgs agsPkgs;
+          packages = mkPackages {
+            inherit pkgs;
           };
         }
     );
