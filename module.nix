@@ -1,10 +1,9 @@
 {
   lib,
-  pkgs,
-  packages,
   config,
   options,
-  agsPkgs,
+  wrappedAgs,
+  astalPackages,
   ...
 }:
 with lib; let
@@ -18,28 +17,12 @@ in {
   config = mkIf cfg.enable {
     fonts.fontconfig.enable = lib.mkDefault true;
 
-    home = {inherit packages;};
-
     programs = {
       # TODOf implement menu, popup menu, lock screen and screen manager
       ags = {
-        extraPackages =
-          (with agsPkgs; [
-            #--- Astal libraries ---
-            apps
-            battery #TODOs install and setup upower
-            bluetooth
-            hyprland
-            mpris
-            network
-            notifd
-            powerprofiles
-            tray
-            wireplumber
-          ])
-          ++ [
-            pkgs.libadwaita
-          ];
+        package = wrappedAgs;
+
+        extraPackages = astalPackages;
 
         enable = true;
 

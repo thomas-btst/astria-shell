@@ -23,9 +23,9 @@
   }: let
     systems = ["x86_64-linux" "aarch64-linux"];
     eachSystem = nixpkgs.lib.genAttrs systems;
-    mkPackages = {pkgs}:
+    mkRuntimeDeps = {pkgs}:
       with pkgs; [
-        #--- Packages ---
+        #--- Runtime deps (only on PATH inside the astria-shell wrapper) ---
         noto-fonts
         xdg-terminal-exec
         blueman
@@ -34,12 +34,48 @@
         networkmanager_dmenu
         pavucontrol
         uutils-coreutils-noprefix
-        wofi
       ];
+    mkAstalPackages = {
+      pkgs,
+      agsPkgs,
+    }:
+      (with agsPkgs; [
+        #--- Astal libraries ---
+        apps
+        battery #TODOs install and setup upower
+        bluetooth
+        hyprland
+        mpris
+        network
+        notifd
+        powerprofiles
+        tray
+        wireplumber
+      ])
+      ++ [pkgs.libadwaita];
+    mkWrappedAgs = {
+      pkgs,
+      extraPackages ? [],
+    }: let
+      agsPkgs = ags.packages.${pkgs.stdenv.hostPlatform.system};
+      agsPkg = agsPkgs.default;
+      runtimeDeps = mkRuntimeDeps {inherit pkgs;};
+    in
+      (agsPkg.overrideAttrs
+        (prev: {
+          nativeBuildInputs = (prev.nativeBuildInputs or []) ++ [pkgs.makeWrapper];
+          postInstall =
+            (prev.postInstall or "")
+            + ''
+              wrapProgram $out/bin/ags \
+                --prefix PATH : ${nixpkgs.lib.makeBinPath runtimeDeps}
+            '';
+        })).override {inherit extraPackages;};
   in {
     homeModules.default = {pkgs, ...}: let
       agsPkgs = ags.packages.${pkgs.stdenv.hostPlatform.system};
-      packages = mkPackages {inherit pkgs;};
+      wrappedAgs = mkWrappedAgs {inherit pkgs;};
+      astalPackages = mkAstalPackages {inherit pkgs agsPkgs;};
     in {
       imports = [
         ags.homeManagerModules.default
@@ -47,19 +83,23 @@
       ];
 
       _module.args = {
-        inherit packages agsPkgs;
+        inherit wrappedAgs astalPackages;
       };
     };
 
     devShells = eachSystem (
-      system:
-        import ./shell.nix rec {
-          pkgs = import nixpkgs {
-            inherit system;
-          };
-          agsPkgs = ags.packages.${system};
-          packages = mkPackages {
+      system: let
+        pkgs = import nixpkgs {
+          inherit system;
+        };
+        agsPkgs = ags.packages.${pkgs.stdenv.hostPlatform.system};
+        astalPackages = mkAstalPackages {inherit pkgs agsPkgs;};
+      in
+        import ./shell.nix {
+          inherit pkgs;
+          wrappedAgs = mkWrappedAgs {
             inherit pkgs;
+            extraPackages = astalPackages;
           };
         }
     );

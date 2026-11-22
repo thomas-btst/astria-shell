@@ -1,10 +1,8 @@
 {
   pkgs,
-  agsPkgs,
-  packages,
+  wrappedAgs,
 }: let
-  ags = agsPkgs.agsFull;
-  shellPkgs = [ags pkgs.alejandra pkgs.statix pkgs.deadnix] ++ packages;
+  shellPkgs = [wrappedAgs pkgs.alejandra pkgs.statix pkgs.deadnix];
 in {
   default = pkgs.mkShell {
     nativeBuildInputs = shellPkgs;
